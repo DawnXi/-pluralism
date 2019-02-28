@@ -1,0 +1,98 @@
+{
+    "pages" : [
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path" : "pages/index/index",
+            "style" : {
+                "navigationBarTitleText" : "趣兼职，和我们一起去做有意思的兼职",
+                "enablePullDownRefresh" : true
+            }
+        },
+        {
+            "path" : "pages/login/login",
+            "style" : {
+                "navigationBarTitleText" : "登录"
+            }
+        },
+        {
+            "path" : "pages/register/register",
+            "style" : {
+                "navigationBarTitleText" : "注册"
+            }
+        },
+        {
+            "path" : "pages/center/center",
+            "style" : {
+                "navigationBarTitleText" : "个人中心"
+            }
+        },
+        {
+            "path" : "pages/list/list",
+            "style" : {
+                "navigationBarTitleText" : "兼职列表",
+                "enablePullDownRefresh" : true
+            }
+        },
+        {
+            "path" : "pages/recommend/recommend",
+            "style" : {
+                "navigationBarTitleText" : "推荐"
+            }
+        },
+        {
+            "path" : "pages/category/category",
+            "style" : {
+                "navigationBarTitleText" : "分类"
+            }
+        },
+        {
+            "path" : "pages/detail/detail",
+            "style" : {
+                "navigationBarTitleText" : "兼职详情"
+            }
+        },
+        {
+            "path" : "pages/forget/forget/forget",
+            "style" : {}
+        }
+    ],
+    "globalStyle" : {
+        "navigationBarTextStyle" : "black",
+        "navigationBarTitleText" : "趣兼职",
+        "navigationBarBackgroundColor" : "#F8F8F8",
+        "backgroundColor" : "#F8F8F8"
+    },
+    // 底部导航的链接
+    "tabBar" : {
+        "color" : "#444444",
+        "selectedColor" : "#FF80AB",
+        "borderStyle" : "black",
+        "backgroundColor" : "#ffffff",
+        "list" : [
+            {
+                "pagePath" : "pages/index/index",
+                "iconPath" : "static/index-0.png",
+                "selectedIconPath" : "static/index-1.png",
+                "text" : "首页"
+            },
+            {
+                "pagePath" : "pages/recommend/recommend",
+                "iconPath" : "static/hot-0.png",
+                "selectedIconPath" : "static/hot-1.png",
+                "text" : "推荐"
+            },
+            {
+                "pagePath" : "pages/category/category",
+                "iconPath" : "static/tag-0.png",
+                "selectedIconPath" : "static/tag-1.png",
+                "text" : "分类"
+            },
+            {
+                "pagePath" : "pages/center/center",
+                "iconPath" : "static/center-0.png",
+                "selectedIconPath" : "static/center-1.png",
+                "text" : "我的"
+            }
+        ]
+    }
+}

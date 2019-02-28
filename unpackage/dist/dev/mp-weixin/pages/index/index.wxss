@@ -1,0 +1,35 @@
+
+.content {
+  text-align: center;
+  height: 400rpx;
+}
+.logo {
+  height: 200rpx;
+  width: 200rpx;
+  margin-top: 200rpx;
+}
+.title {
+  font-size: 36rpx;
+  color: #8f8f94;
+}
+.swiper {
+  height: 300rpx;
+}
+.swiper-item {
+  display: block;
+  height: 300rpx;
+  line-height: 300rpx;
+  text-align: center;
+}
+.swiper-list {
+  margin-top: 40rpx;
+  margin-bottom: 0;
+}
+.uni-common-mt {
+  margin-top: 60rpx;
+  position: relative;
+}
+.info {
+  position: absolute;
+  right: 20rpx;
+}

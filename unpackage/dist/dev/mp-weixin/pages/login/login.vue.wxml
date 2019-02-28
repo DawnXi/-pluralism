@@ -1,0 +1,22 @@
+<template name="31c9eb98">
+  <view class="_view data-v-6b295dc3">
+    <page-head title="登录" class="_page-head data-v-6b295dc3"></page-head>
+    <view class="_view data-v-6b295dc3 uni-padding-wrap uni-common-mt">
+      <form bindsubmit="handleProxy" bindreset="handleProxy" data-eventid="{{'foG-0'}}" data-comkey="{{$k}}" class="_form data-v-6b295dc3">
+        <view class="_view data-v-6b295dc3 uni-form-item uni-column">
+          <view class="_view data-v-6b295dc3 title">用户名/手机号</view>
+          <input class="_input data-v-6b295dc3 uni-input" type="text" name="input" placeholder="请输入用户名/手机号" />
+        </view>
+        <view class="_view data-v-6b295dc3 uni-form-item uni-column">
+          <view class="_view data-v-6b295dc3 title">密码</view>
+          <input class="_input data-v-6b295dc3 uni-input" type="password" name="input" placeholder="请输入密码" />
+        </view>
+        <button type="primary" class="_button data-v-6b295dc3">登录</button>
+      </form>
+    </view>
+    <view class="_view data-v-6b295dc3 uni-flex uni-row" style="justify-content: space-between;">
+      <view class="_view data-v-6b295dc3 text">还没有账号？立即注册</view>
+      <view class="_view data-v-6b295dc3 text">忘记密码？</view>
+    </view>
+  </view>
+</template>
