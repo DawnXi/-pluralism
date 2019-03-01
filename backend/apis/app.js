@@ -67,7 +67,7 @@ app.get('/get-user', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -84,7 +84,7 @@ app.post('/api/get_type', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -101,7 +101,7 @@ app.post('/api/add_type', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -118,7 +118,7 @@ app.post('/api/put_type', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -136,7 +136,7 @@ app.post('/api/delete_type', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -153,8 +153,7 @@ app.get('/api/get_work', (req,res) => {
 			password: req.query.password
 		},
 		success(data) {
-			console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -168,7 +167,7 @@ app.post('/api/add_work', (req,res) => {
 		data: req.body,
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -188,7 +187,7 @@ app.post('/api/put_work/:id', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
@@ -205,7 +204,7 @@ app.post('/api/delete_work/:id', (req,res) => {
 		},
 		success(data) {
 			// console.log(data);
-			res.end(JSON.stringify(data));
+			res.json(data);
 		},
 		failed(err) {
 			console.log(err);
