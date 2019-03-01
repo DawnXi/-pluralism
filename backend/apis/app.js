@@ -52,9 +52,11 @@ app.all('*', function(req, res, next) {
 
 app.get('/', (req,res) => {
     res.end('123')
-})
-let userApi = require('./models/user')
-let getUserApi = userApi.getUserInfo
+});
+let userApi = require('./models/user');
+let typeApi = require('./models/work_type');
+let workApi = require('./models/works');
+let getUserApi = userApi.getUserInfo;
 
 // 获取用户信息
 app.get('/get-user', (req,res) => {
@@ -71,7 +73,145 @@ app.get('/get-user', (req,res) => {
 			console.log(err);
 		}
 	})
-})
+});
+
+// 查询分类列表
+app.post('/api/get_type', (req,res) => {
+	typeApi.get_type({
+		data: {
+			username: req.query.username,
+			password: req.query.password
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 添加分类
+app.post('/api/add_type', (req,res) => {
+	typeApi.add_type({
+		data: {
+			username: req.query.username,
+			password: req.query.password
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 修改分类
+app.post('/api/put_type', (req,res) => {
+	typeApi.put_type({
+		data: {
+			username: req.query.username,
+			password: req.query.password
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// 删除分类
+app.post('/api/delete_type', (req,res) => {
+	typeApi.delete_type({
+		data: {
+			username: req.query.username,
+			password: req.query.password
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// 查询兼职列表
+app.get('/api/get_work', (req,res) => {
+	workApi.get_work({
+		data: {
+			username: req.query.username,
+			password: req.query.password
+		},
+		success(data) {
+			console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 添加兼职
+app.post('/api/add_work', (req,res) => {
+	workApi.add_work({
+		data: req.body,
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 修改兼职
+app.post('/api/put_work/:id', (req,res) => {
+	console.log('请求参数');
+	console.log(req.body);
+	// let param = req.body;
+	workApi.put_work({
+		data: {
+			param: req.body,
+			where: {'id': Number(req.params.id)},
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// 删除兼职
+app.post('/api/delete_work/:id', (req,res) => {
+	workApi.delete_work({
+		data: {
+			where: {'id': Number(req.params.id)},
+		},
+		success(data) {
+			// console.log(data);
+			res.end(JSON.stringify(data));
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
 
 // 登录
 // app.post('/api/login', (req,res) => {
@@ -139,13 +279,12 @@ function authenticateRequest(req, res, next) {
 
 	return app.oauth.authenticate(request, response)
 		.then(function(token) {
-
 			next();
 		}).catch(function(err) {
 
 			res.status(err.code || 500).json(err);
 		});
 }
-
+// todo 把路由提取出来
 
 app.listen(888);

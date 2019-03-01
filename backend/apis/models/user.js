@@ -18,7 +18,7 @@ const sequelize = require('./sequelize');
 
 const userApi = {
 	register(options = {}) {
-		sequelize.models.User.findAll({
+		sequelize.models.user.findAll({
 			where: {
 				username: 'ymx',
 				password: '123'
@@ -36,7 +36,7 @@ const userApi = {
 	login(options = {}) {
 		console.log(222)
 		console.log(options.data)
-		sequelize.models.User.findAll({
+		sequelize.models.user.findAll({
 			where: options.data
 		}).then(res => {
 			if (options.success && typeof options.success === 'function') {
@@ -49,7 +49,7 @@ const userApi = {
 		});
 	},
 	getUserInfo(options = {}) {
-		sequelize.models.User.findAll({
+		sequelize.models.user.findAll({
 			where: options.data
 		}).then(res => {
 			if (options.success && typeof options.success === 'function') {
