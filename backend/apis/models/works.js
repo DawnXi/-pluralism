@@ -2,15 +2,15 @@ const sequelize = require('./sequelize');
 
 sequelize.db.sync()
 	.then(() => sequelize.models.work.create({
-		title: 'Sequelize.STRING',
-		des: 'Sequelize.STRING',
+		title: 'gg.STRING',
+		des: 'gg.STRING',
 		tag: '包吃住???五险一金',
 		salary: '3000-5000/月', //工资
 		page_views: 55, // 浏览量
 		company: '农夫未来', // 发布公司
 		location: '锦江区新光华街1号', // 工作地点
 		phone: '186281005212',//雇主电话
-		wx: 'Sequelize.STRING',// 雇主微信
+		wx: 'ggg.STRING',// 雇主微信
 	}))
 	.then(jane => {
 		console.log(jane.toJSON());
@@ -25,7 +25,7 @@ const work = {
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('获取分类列表失败！')
+				options.failed(err)
 			}
 		});
 	},
@@ -35,8 +35,9 @@ const work = {
 				options.success(res)
 			}
 		}).catch(err => {
+			console.log(err);
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('添加失败Q')
+				options.failed(err)
 			}
 		});
 	},
@@ -53,7 +54,7 @@ const work = {
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('删除失败！');
+				options.failed(err);
 				console.log(err)
 			}
 		});
@@ -74,7 +75,7 @@ const work = {
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
 				console.log(err);
-				options.failed('修改失败！')
+				options.failed(err)
 			}
 		});
 	}

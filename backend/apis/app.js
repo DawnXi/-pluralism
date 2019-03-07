@@ -8,6 +8,7 @@
 // // 
 // app.use(bodyParser.json()); // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+const sequelize = require('./models/sequelize');
 
 let express = require('express'),
 	bodyParser = require('body-parser'),
@@ -61,10 +62,6 @@ let getUserApi = userApi.getUserInfo;
 // 获取用户信息
 app.get('/get-user', (req,res) => {
 	getUserApi({
-		data: {
-			username: req.query.username,
-			password: req.query.password
-		},
 		success(data) {
 			// console.log(data);
 			res.json(data);
@@ -76,7 +73,7 @@ app.get('/get-user', (req,res) => {
 });
 
 // 查询分类列表
-app.post('/api/get_type', (req,res) => {
+app.get('/api/get_type', (req,res) => {
 	typeApi.get_type({
 		data: {
 			username: req.query.username,
@@ -148,10 +145,6 @@ app.post('/api/delete_type', (req,res) => {
 // 查询兼职列表
 app.get('/api/get_work', (req,res) => {
 	workApi.get_work({
-		data: {
-			username: req.query.username,
-			password: req.query.password
-		},
 		success(data) {
 			res.json(data);
 		},
@@ -171,8 +164,19 @@ app.post('/api/add_work', (req,res) => {
 		},
 		failed(err) {
 			console.log(err);
+			res.status(500).json({ error: err })    //返回错误码
 		}
 	})
+    // res.end('jjjj');
+    // let data = req.body;
+    // sequelize.models.work.create({
+    //     data,
+    //     raw: true
+    // }).then(data => {
+    //     res.status(200).json({ data: data })
+    // }).catch(err => {
+    //     res.status(500).json({ errorMessage: err })
+    // });
 });
 
 // 修改兼职
@@ -258,8 +262,8 @@ app.get('/test', authenticateRequest, function(req, res) {
 
 function obtainToken(req, res) {
 
-	var request = new Request(req);
-	var response = new Response(res);
+	let request = new Request(req);
+	let response = new Response(res);
 
 	return app.oauth.token(request, response)
 		.then(function(token) {
@@ -273,8 +277,8 @@ function obtainToken(req, res) {
 
 function authenticateRequest(req, res, next) {
 
-	var request = new Request(req);
-	var response = new Response(res);
+	let request = new Request(req);
+	let response = new Response(res);
 
 	return app.oauth.authenticate(request, response)
 		.then(function(token) {

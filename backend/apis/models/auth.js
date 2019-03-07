@@ -2,7 +2,7 @@
  * Configuration.
  */
 
-var config = {
+let config = {
 	clients: [{
 		id: 'application',	// TODO: Needed by refresh_token grant, because there is a bug at line 103 in https://github.com/oauthjs/node-oauth2-server/blob/v3.0.1/lib/grant-types/refresh-token-grant-type.js (used client.id instead of client.clientId)
 		clientId: 'application',
@@ -32,37 +32,11 @@ var config = {
 // 连接数据库，获取用户数据
 const sequelize = require('./sequelize');
 
-//
-// User.findAll().then(res => {
-// 	console.log(111);
-//   console.log(res);
-//   config.users = res;
-// 	console.log(222);
-// 	console.log(config.users);
-// }).catch(err => {
-//   console.log(err);
-// });
-
-
-// (async () => {
-//     let allUsers = await User.findAll();
-// 		console.log(`find ${allUsers.length} users:`);
-// 		 config.users = [];
-// 		 for (let u of allUsers) {
-// 			  config.users.push(u.dataValues);
-// 				 console.log(JSON.stringify(u));
-// 		 }
-// 		 console.log(2220)
-// 		 console.log(config.users)
-// })();
-
-
-
 /**
  * Dump the memory storage content (for debug).
  */
 
-var dump = function() {
+let dump = function() {
 
 	console.log('clients', config.clients);
 	console.log('confidentialClients', config.confidentialClients);
@@ -74,9 +48,9 @@ var dump = function() {
  * Methods used by all grant types.
  */
 
-var getAccessToken = function(token) {
+let getAccessToken = function(token) {
 
-	var tokens = config.tokens.filter(function(savedToken) {
+	let tokens = config.tokens.filter(function(savedToken) {
 
 		return savedToken.accessToken === token;
 	});
@@ -84,14 +58,14 @@ var getAccessToken = function(token) {
 	return tokens[0];
 };
 
-var getClient = function(clientId, clientSecret) {
+let getClient = function(clientId, clientSecret) {
 
-	var clients = config.clients.filter(function(client) {
+	let clients = config.clients.filter(function(client) {
 
 		return client.clientId === clientId && client.clientSecret === clientSecret;
 	});
 
-	var confidentialClients = config.confidentialClients.filter(function(client) {
+	let confidentialClients = config.confidentialClients.filter(function(client) {
 
 		return client.clientId === clientId && client.clientSecret === clientSecret;
 	});
@@ -99,7 +73,7 @@ var getClient = function(clientId, clientSecret) {
 	return clients[0] || confidentialClients[0];
 };
 
-var saveToken = function(token, client, user) {
+let saveToken = function(token, client, user) {
 
 	token.client = {
 		id: client.clientId
@@ -118,20 +92,7 @@ var saveToken = function(token, client, user) {
  * Method used only by password grant type.
  */
 
-var getUser = function(username, password) {
-
-	//  (async () => {
-	//     let allUsers = await User.findAll({
-	// 		  where: {
-	// 		    username: username,
-	// 		    password: password
-	// 		  },
-	// 			raw: true
-	// 		});
-	// 		config.users = allUsers
-	// })();
-
-
+let getUser = function(username, password) {
 return 	sequelize.models.User.findAll({
 	  where: {
 	    username: username,
@@ -144,33 +105,15 @@ return 	sequelize.models.User.findAll({
 	}).catch((err) => {
 		console.log(err)
 	})
-
-	// var test = [
-	// 	{ id: 1,
-  // username: 'ymx',
-  // password: '123',
-  // birthday: '1980-07-19T16:00:00.000Z',
-  // createdAt: '2019-02-26T09:43:51.000Z',
-  // updatedAt: '2019-02-26T09:43:51.000Z' }
-	//
-	// ]
-	// var test = []
-	//
-	// var users = config.users.filter(function(user) {
-	//
-	// 	return user.username === username && user.password === password;
-	// });
-	//
-	// return users[0];
 };
 
 /*
  * Method used only by client_credentials grant type.
  */
 
-var getUserFromClient = function(client) {
+let getUserFromClient = function(client) {
 
-	var clients = config.confidentialClients.filter(function(savedClient) {
+	let clients = config.confidentialClients.filter(function(savedClient) {
 
 		return savedClient.clientId === client.clientId && savedClient.clientSecret === client.clientSecret;
 	});
@@ -182,9 +125,9 @@ var getUserFromClient = function(client) {
  * Methods used only by refresh_token grant type.
  */
 
-var getRefreshToken = function(refreshToken) {
+let getRefreshToken = function(refreshToken) {
 
-	var tokens = config.tokens.filter(function(savedToken) {
+	let tokens = config.tokens.filter(function(savedToken) {
 
 		return savedToken.refreshToken === refreshToken;
 	});
@@ -193,20 +136,20 @@ var getRefreshToken = function(refreshToken) {
 		return;
 	}
 
-	var token = Object.assign({}, tokens[0]);
+	let token = Object.assign({}, tokens[0]);
 	token.user.username = token.user.id;
 
 	return token;
 };
 
-var revokeToken = function(token) {
+let revokeToken = function(token) {
 
 	config.tokens = config.tokens.filter(function(savedToken) {
 
 		return savedToken.refreshToken !== token.refreshToken;
 	});
 
-	var revokedTokensFound = config.tokens.filter(function(savedToken) {
+	let revokedTokensFound = config.tokens.filter(function(savedToken) {
 
 		return savedToken.refreshToken === token.refreshToken;
 	});

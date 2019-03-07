@@ -17,19 +17,19 @@ const work_type = {
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('获取分类列表失败！')
+				options.failed(err)
 			}
 		});
 	},
 	add_type(options = {}) {
-		console.log(options.data)
+		console.log(options.data);
 		sequelize.models.work_type.create(options.data).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('添加失败Q')
+				options.failed(err)
 			}
 		});
 	},
@@ -43,7 +43,7 @@ const work_type = {
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('删除失败！')
+				options.failed(err);
 				console.log(err)
 			}
 		});
@@ -59,11 +59,11 @@ const work_type = {
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('修改失败！')
+				options.failed(err)
 			}
 		});
 	},
 
-}
+};
 
 module.exports = work_type;
