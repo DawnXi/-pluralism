@@ -66,7 +66,7 @@ work_type.hasMany(work);
 // 收藏表
 const collect = sequelize.define('collect', {
 	// collect_id:Sequelize.INET,
-	userName: Sequelize.STRING
+	workName: Sequelize.STRING
 });
 // 用户的收藏
 user.hasMany(collect);
@@ -76,7 +76,7 @@ user.hasMany(collect);
 // 评论表
 const comment = sequelize.define('comment', {
 	// comment_id:Sequelize.INET,
-	userName: Sequelize.STRING
+	workName: Sequelize.STRING
 });
 // 用户的评论
 user.hasMany(comment);
@@ -87,7 +87,7 @@ user.hasMany(comment);
 // 投递表
 const delivery = sequelize.define('delivery', {
 	// delivery_id:Sequelize.INET,
-	userName: Sequelize.STRING
+	workName: Sequelize.STRING
 });
 // 用户的投递
 user.hasMany(delivery);

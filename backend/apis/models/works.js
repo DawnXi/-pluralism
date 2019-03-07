@@ -19,7 +19,13 @@ sequelize.db.sync()
 
 const work = {
 	get_work(options = {}) {
-		sequelize.models.work.findAll({raw: true}).then(res => {
+	    let filter= JSON.parse(options.filter);
+		sequelize.models.work.findAll({
+            offset: options.data.size ? (Number(options.data.page) - 1) * options.data.size : 0, // 默认不跳过（显示第一页数据）
+            limit: options.data.size ? options.data.size : 100, // 分页大小  默认100
+            where: filter, // 查询条件
+            raw: true
+		}).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}

@@ -93,7 +93,7 @@ let saveToken = function(token, client, user) {
  */
 
 let getUser = function(username, password) {
-return 	sequelize.models.User.findAll({
+return 	sequelize.models.user.findAll({
 	  where: {
 	    username: username,
 	    password: password
