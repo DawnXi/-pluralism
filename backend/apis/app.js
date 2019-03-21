@@ -1,11 +1,11 @@
 // let express = require('express')
 // let app = express()
-// 
-// 
+//
+//
 // let bodyParser = require('body-parser');
 // // let multer = require('multer'); // v1.0.5
 // // let upload = multer(); // for parsing multipart/form-data
-// // 
+// //
 // app.use(bodyParser.json()); // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const sequelize = require('./models/sequelize');
@@ -54,13 +54,14 @@ app.all('*', function(req, res, next) {
 
 app.get('/test2', (req,res) => {
     let data = req.query;
-    // console.log(666);
-    // console.log(data);
+    console.log(666);
+    console.log(data);
     // console.log(JSON.parse(querystring.parse(data).filter));
     sequelize.models.work.findAll({
         offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
         limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
-        where: JSON.parse(data.filter), // 查询条件
+        where: data.filter ? JSON.parse(data.filter) : {}, // 查询条件
+		like: data.like, // 模糊查询
         // where: {title: 'hhh'}, // 查询条件
         raw: true
     }).then(result => {
@@ -154,30 +155,14 @@ app.post('/api/delete_type', (req,res) => {
 // 查询兼职列表
 // 添加模糊查询和分类查询
 app.get('/api/get_work', (req,res) => {
-    // if (req.query) {
-    //     console.log(111);
-    //     console.log(req.query)
-    // }
-	// workApi.get_work({
-    //     data: {
-    //         page: req.page,
-    //         size: req.size,
-    //         filter: req.filter
-    //     },
-	// 	success(data) {
-	// 		res.json(data);
-	// 	},
-	// 	failed(err) {
-	// 		console.log(err);
-	// 	}
-	// })
-
-
     let data = req.query;
+    console.log(1111111111111);
+	console.log(data);
     sequelize.models.work.findAll({
         offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
         limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
-        where: JSON.parse(data.filter), // 查询条件
+        where: JSON.parse(data.filter ? data.filter : "{}"), // 查询条件（按条件过滤）
+		like: data.like ? data.like : '', // 模糊查询
         raw: true
     }).then(result => {
         res.json({
@@ -200,17 +185,7 @@ app.post('/api/add_work', (req,res) => {
 			console.log(err);
 			res.status(500).json({ error: err })    //返回错误码
 		}
-	})
-    // res.end('jjjj');
-    // let data = req.body;
-    // sequelize.models.work.create({
-    //     data,
-    //     raw: true
-    // }).then(data => {
-    //     res.status(200).json({ data: data })
-    // }).catch(err => {
-    //     res.status(500).json({ errorMessage: err })
-    // });
+	});
 });
 
 // 修改兼职
@@ -261,6 +236,20 @@ app.post('/api/add_comment', (req,res) => {
     });
 });
 
+// 删除用户评论
+app.post('/api/delete_comment/:id', (req,res) => {
+  sequelize.models.comment.destroy(
+    {
+      where: {'id': Number(req.params.id)}
+    }
+  ).then(result => {
+    res.json(result);
+  }).catch(err => {
+    res.json(err);
+  });
+});
+
+
 // 用户投递简历
 app.post('/api/add_delivery', (req,res) => {
     sequelize.models.delivery.create(req.body).then( result => {
@@ -300,7 +289,7 @@ app.post('/api/delete_collect/:id', (req,res) => {
 // 	userApi.login({
 // 		data: {
 // 			username: req.body.username,
-// 			password: req.body.password 
+// 			password: req.body.password
 // 		},
 // 		success(data) {
 // 			// console.log(data);

@@ -101,7 +101,7 @@ const user = {
 			// 					userName : state.userInfo.username
 			// 				}
 			uni.request({
-				url: 'http://localhost:888/oauth/token', //仅为示例，并非真实接口地址。
+				url: 'http://39.96.199.119:888/oauth/token', //仅为示例，并非真实接口地址。
 				data: options.data,
 				method: 'POST',
 				header: {
