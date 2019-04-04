@@ -1,39 +1,19 @@
-const Sequelize = require('sequelize');
-const db = require('./sequelize');
+const sequelize = require('./sequelize');
 
-// const express = require('express');
-// const app = new express();
-
-// 测试连接
-db.authenticate()
-	.then(() => {
-		console.log('Connection has been established successfully.');
-	})
-	.catch(err => {
-		console.error('Unable to connect to the database:', err);
+sequelize.db.sync()
+	.then(() => sequelize.models.work_type.create({
+		name: '派单员',
+	}))
+	.then(jane => {
+		console.log(jane.toJSON());
 	});
-// 定义数据模型
-const work_types = db.define('user', {
-	id: Sequelize.INTIGER,
-	name: Sequelize.STRING,
-	birthday: Sequelize.DATE
-});
-
-// db.sync()
-// 	.then(() => User.create({
-// 		username: 'ymx',
-// 		password: '123',
-// 		birthday: new Date(1980, 6, 20)
-// 	}))
-// 	.then(jane => {
-// 		console.log(jane.toJSON());
-// 	});
+// 这里要处理增删改查
 
 const work_type = {
-	getAll(options = {}) {
-		User.findAll().then(res => {
+	get_type(options = {}) {
+		sequelize.models.work_type.findAll({raw: true}).then(res => {
 			if (options.success && typeof options.success === 'function') {
-				options.success(res.data.data)
+				options.success(res)
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
@@ -41,23 +21,38 @@ const work_type = {
 			}
 		});
 	},
-	login(options = {}) {
-		console.log(options.data)
-		User.findAll({
-			where: options.data
-		}).then(res => {
+	add_type(options = {}) {
+		console.log(options.data);
+		sequelize.models.work_type.create(options.data).then(res => {
 			if (options.success && typeof options.success === 'function') {
-				options.success({msg: options.data.username + '登录成功'})
+				options.success(res)
 			}
 		}).catch(err => {
 			if (options.failed && typeof options.failed === 'function') {
-				options.failed('登录失败' + err)
+				options.failed(err)
 			}
 		});
 	},
-	getUserInfo(options = {}) {
-		User.findAll({
-			where: options.data
+	delete_type(options = {}) {
+		sequelize.models.work_type.destroy({
+			where: options.data,
+			raw: true
+		}).then(res => {
+			if (options.success && typeof options.success === 'function') {
+				options.success(res)
+			}
+		}).catch(err => {
+			if (options.failed && typeof options.failed === 'function') {
+				options.failed(err);
+				console.log(err)
+			}
+		});
+	},
+	put_type(options = {}) {
+		sequelize.models.work_type.update({
+			pram: options.data.pram,
+			where: options.data.where,
+			raw: true
 		}).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
@@ -69,6 +64,6 @@ const work_type = {
 		});
 	},
 
-}
+};
 
 module.exports = work_type;
