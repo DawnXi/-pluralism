@@ -1,1 +1,7 @@
 /unpackage
+node_modules
+.project
+.vscode
+.history
+dist/
+/.idea
