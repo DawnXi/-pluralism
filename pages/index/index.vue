@@ -5,14 +5,40 @@
             <text class="title">{{title}}</text>
         </view> -->
 		<text>这个是首页</text>
+		<view class="banner">
+			<image class="img" src="../../static/banner.png" mode="scaleToFill"></image>
+		</view>
 		<view class="search">
 			<image class="logo" src="/static/logo.png"></image>
 			<view class="search-input">
-				<input confirm-type='search' v-model="keyword" style="text-align: left; border-radius: 20upx;margin: 0 20upx;" placeholder-style="text-align: left;" class="uni-input" type="text" name="keyword" placeholder="搜索商品" />
+				<input @focus='onFocus' confirm-type='search' v-model="keyword" style="" class="uni-input" type="text" name="keyword" placeholder="搜索公司,职位等" />
 				<text @click="searchGoods" class="icon search" style="">&#xe66e;</text>
 			</view>
 		</view>
-		<view class="uni-padding-wrap">
+		<!-- 搜索面板 -->
+		<searchPanel v-if='showPanel'></searchPanel>
+		
+		<!-- 兼职列表 -->
+		<view class="works-list">
+			<view class="item" v-for="n in 5" :key="n">
+				<div class="left">
+					<image class="img" src="../../static/ym.png" mode="widthFix"></image>
+					<view class="state">报名中</view>
+				</div>
+				<div class="right">
+					<view class="title">天猫优惠券在家赚钱25岁以上女性宝妈优先<text class="tag">热</text><text class="tag">荐</text></view>
+					<view class="info">
+						<view class="local">成都</view>
+						<view class="salary">
+							<view class="money">200元/天</view>
+							<view class="time">长期可做</view>
+						</view>
+					</view>
+				</div>
+			</view>
+		</view>
+		
+		<!-- <view class="uni-padding-wrap">
 			<view class="page-section swiper">
 				<view class="page-section-spacing">
 					<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="true">
@@ -28,7 +54,7 @@
 					</swiper>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		
 		<button size="mini" @tap="toList">跳转到列表页</button>
 		<button size="mini" @tap="toDetail">跳转到详情页</button>
@@ -50,6 +76,7 @@
 <script>
 	import {mapState, mapActions} from 'vuex'
 	// import work_type from '../../lib/api'
+	import searchPanel from '../../components/search-panel.vue'
 	export default {
 		data() {
 			return {
@@ -59,7 +86,8 @@
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
-				keyword: ''
+				keyword: '',
+				showPanel: false, // 是否显示搜索历史面板
 			}
 		},
 		computed: {
@@ -68,6 +96,9 @@
 			...mapState('work', {
 				works: state => state.data
 			}),
+		},
+		components:{
+			searchPanel
 		},
 		watch: {
 		    goods: function (val) {
@@ -82,6 +113,9 @@
 				uni.navigateTo({
 					url: '../../pages/list/list'
 				})
+			},
+			onFocus() {
+				this.showPanel = true;
 			},
 			toDetail () {
 				uni.navigateTo({
@@ -206,18 +240,19 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.search {
 		padding: 20upx;
 	}
 	.search-input{
 		position: relative;
 	}
-	/* .icon: {
-		position: absolute;
-		right: 10upx;
-		top: 0px;
-	} */
+	.search-input input{
+		text-align: left; 
+		border-radius: 20upx;
+		margin: 0 20upx;
+        placeholder-color: #D8D8D8;
+	}
 	input.search{
 		text-align: left; border-radius: 20upx;margin: 0 20upx;
 	}
@@ -262,6 +297,36 @@
 		.info {
 			position: absolute;
 			right:20upx;
+		}
+		
+		.works-list .item{
+			display: flex;
+			justify-content: space-between;
+			margin: 0 5%;
+			padding-bottom: 100upx;
+			border-bottom: #8f8f94;
+			color: #D8D8D8;
+			.left{
+				width: 20%;
+			}
+			.right {
+				width: 75%;
+			}
+			.img{
+				width: 100%;
+				height: 200upx;
+			}
+			.title{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.info {
+				width: 65%;
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-end;
+			}
 		}
 </style>
 

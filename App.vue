@@ -23,6 +23,9 @@
 
     @import "/static/Simple-login/css/simplepro.css";
 	
+	/* icfont样式库 */
+	@import "./common/icfont.css";
+	
 	/* 以下样式用于 hello uni-app 演示所需 */
 	page {
 		background-color:#F4F5F6;
