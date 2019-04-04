@@ -6,7 +6,7 @@
         </view> -->
 		<text>这个是首页</text>
 		<view class="search">
-			<image class="logo" src="../../static/logo.png"></image>
+			<image class="logo" src="/static/logo.png"></image>
 			<view class="search-input">
 				<input confirm-type='search' v-model="keyword" style="text-align: left; border-radius: 20upx;margin: 0 20upx;" placeholder-style="text-align: left;" class="uni-input" type="text" name="keyword" placeholder="搜索商品" />
 				<text @click="searchGoods" class="icon search" style="">&#xe66e;</text>
@@ -29,16 +29,27 @@
 				</view>
 			</view>
 		</view>
+		
 		<button size="mini" @tap="toList">跳转到列表页</button>
 		<button size="mini" @tap="toDetail">跳转到详情页</button>
 		<button size="mini" @click="test">测试axios</button>
 		<button size="mini" @click="goLogin" type="primary">跳转到注册页</button>
 		<button size="mini" @click="goRegister" type="primary">跳转到登陆页</button>
+		<button size="mini" @click="testAdd" type="primary">添加分类</button>
+		<button size="mini" @click="testUpt" type="primary">修改分类</button>
+		<button size="mini" @click="testDelet" type="primary">删除分类</button>
+		<button size="mini" @click="testGet" type="primary">获取分类列表</button>
+		<ul>
+			<li v-for="(item,index) in works" :key="index">
+				{{item.tag}}
+			</li>
+		</ul>
 	</view>
 </template>
 
 <script>
-	import {mapState, mapActions} from 'vuex' 
+	import {mapState, mapActions} from 'vuex'
+	// import work_type from '../../lib/api'
 	export default {
 		data() {
 			return {
@@ -53,7 +64,10 @@
 		},
 		computed: {
 			...mapState('user',['userInfo']),
-			...mapState('goods',['searchData'])
+			...mapState('goods',['searchData']),
+			...mapState('work', {
+				works: state => state.data
+			}),
 		},
 		watch: {
 		    goods: function (val) {
@@ -63,6 +77,7 @@
 		methods: {
 			...mapActions('user', ['getUserInfo']),
 			...mapActions('goods', ['TkGoodsSearch']),
+			...mapActions('work', ['getWorks','addWork','putWork','deleteWork']),
 			toList () {
 				uni.navigateTo({
 					url: '../../pages/list/list'
@@ -112,6 +127,76 @@
 						alert('搜索失败！')
 					}
 				})
+			},
+			testGet() {
+				this.getWorks({
+					success: (res) => {
+						alert('请求列表成功！')
+					},
+					failed: (err) => {
+						alert('请求列表失败！')
+					}
+				})
+			},
+			testAdd() {
+				this.addWork({
+					data: {
+						title: 'Sequelize.STRING',
+						des: 'Sequelize.STRING',
+						tag: '包吃住???五险一金',
+						salary: '1000-2000/月', //工资
+						page_views: 55, // 浏览量
+						company: '农夫未来灌灌灌灌灌灌', // 发布公司
+						location: '锦江区的也容易', // 工作地点
+						phone: '186281005212',//雇主电话
+						wx: 'Sequelize.STRING',// 雇主微信
+					},
+					success: (res) => {
+						this.getWorks();
+						alert('添加兼职成功！')
+					},
+					failed: (err) => {
+						alert('添加兼职失败！')
+					}
+				})
+			},
+			testUpt() {
+				this.putWork({
+					data: {
+						// from 里的内容
+						title: 'Sequelize.STRING',
+						des: 'Sequelize.STRING',
+						tag: '包吃住???五险一金???kkk',
+						salary: '1000-2000/月', //工资
+						page_views: 55, // 浏览量
+						company: 'hhhhhhhhhhhhhh', // 发布公司
+						location: '锦江区的也容易', // 工作地点
+						phone: '186281005212',//雇主电话
+						wx: 'Sequelize.STRING',// 雇主微信
+						id: '17'
+					},
+					success: (res) => {
+						this.getWorks();
+						alert('修改兼职成功！')
+					},
+					failed: (err) => {
+						alert('修改兼职失败！')
+					}
+				})
+			},
+			testDelet() {
+				this.deleteWork({
+					data: {
+						id: '24'
+					},
+					success: (res) => {
+						this.getWorks();
+						alert('删除兼职成功！')
+					},
+					failed: (err) => {
+						alert('删除兼职失败！')
+					}
+				})
 			}
 		},
 		onLoad() {
@@ -142,7 +227,7 @@
 	.content {
 		text-align: center;
 		height: 400upx;
-		
+
 	}
     .logo{
         height: 70upx;
@@ -163,17 +248,17 @@
 			line-height: 300upx;
 			text-align: center;
 		}
-	
+
 		.swiper-list {
 			margin-top: 40upx;
 			margin-bottom: 0;
 		}
-		
+
 		.uni-common-mt{
 			margin-top:60upx;
 			position:relative;
 		}
-		
+
 		.info {
 			position: absolute;
 			right:20upx;

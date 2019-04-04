@@ -17,7 +17,7 @@
 		<view class="uni-flex uni-row" style="justify-content: space-between;">
 			<view class="text" @click="toRegister">还没有账号？立即注册</view>
 			<view class="text" @click="toForget">忘记密码？</view>
-			<button type="primary" formType="submit">测试axios</button>
+			<button type="primary" @click="testPost">测试axios</button>
 		</view>
 	</view>
 </template>
@@ -81,9 +81,50 @@
 				})
 			},
 			testPost () {
-				axios.post('http://localhost:888/api/login', (req,res) =>{
-					console.log(res.data);
-				})
+				// uni.request({
+				// 	url: 'http://localhhost:888/api/add_work',
+				// 	method: 'POST',
+				// 	data: {
+				// 		title: 'Sequelize.STRING',
+				// 		des: 'Sequelize.STRING',
+				// 		tag: '包吃住???五险一金',
+				// 		salary: '5000-100000/月',
+				// 		page_views: 55,
+				// 		company: 'jsadkjsahdkjsahkj',
+				// 		location: '锦江区bbb',
+				// 		phone: '186281005212',
+				// 		wx: 'Sequelize.STRING'}
+				// 	,
+				// 	header: {
+				// 		'custom-header': 'hello' //自定义请求头信息
+				// 	},
+				// 	success: (res) => {
+				// 		console.log(res.data);
+				// 		this.text = 'request success';
+				// 	}
+				// });
+
+				let filter = {
+					title: 'hhh',
+					wx: '111'
+				};
+				uni.request({
+					// url: `http://localhhost:888/api/get_work?filter=${JSON.stringify(filter)}`,
+					url: `http://localhost:888/test2?filter=${JSON.stringify(filter)}`,
+					method: 'GET',
+					header: {
+						'custom-header': 'hello' //自定义请求头信息
+					},
+					success: (res) => {
+						console.log(res.data);
+						this.text = 'request success';
+					},
+					fail: (err) => {
+						console.log(err);
+						alert(err)
+					}
+				});
+
 			}
 		}
 	}

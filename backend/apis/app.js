@@ -302,6 +302,57 @@ app.post('/api/delete_collect/:id', (req,res) => {
 // 	})
 // })
 
+let address = require('./models/address');
+
+// 地址查询接口
+app.get('/api/getAddress/area', (req,res) => {
+    let data = req.query;
+    console.log(1111111111111);
+	console.log(data);
+    address.getArea({
+		data: {
+			area: req.query.area
+		},
+		success(data) {
+			// console.log(data);
+			
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 街道查询接口
+app.get('/api/getAddress/street', (req,res) => {
+    let data = req.query;
+    console.log(1111111111111);
+	console.log(data);
+	address.getStreet({
+		data: {
+			area: req.query.area,
+			street: req.query.street
+		},
+		success(data) {
+			// console.log(data);
+			res.json(data);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// // 测试连接
+// sequelize.authenticate()
+// 	.then(() => {
+// 		console.log('Connection has been established successfully.');
+// 	})
+// 	.catch(err => {
+// 		console.error('Unable to connect to the database:', err);
+// 	});
+
 // 获取用户信息
 app.oauth = new OAuth2Server({
 	model: require('./models/auth.js'),
