@@ -6,7 +6,7 @@
         </view> -->
 		<text>这个是首页</text>
 		<view class="banner">
-			<image class="img" src="../../static/banner.png" mode="scaleToFill"></image>
+			<image class="banner-img" src="../../static/banner.png" mode="widthFix"></image>
 		</view>
 		<view class="search">
 			<image class="logo" src="/static/logo.png"></image>
@@ -70,6 +70,18 @@
 				{{item.tag}}
 			</li>
 		</ul>
+		
+		
+		// 自定义的弹出框
+		<!--<model :options="modelData"></model>-->
+		<button type="primary" size="mini" @click="handleShow(1)">查看</button>
+		<xyDialog
+				title="标题"
+				content="操作成功,你懂得~"
+				:show="showDialog_1"
+				@cancelButton="clickCancel(1)"
+				@confirmButton="clickConfirm(1)"
+		></xyDialog>
 	</view>
 </template>
 
@@ -77,6 +89,8 @@
 	import {mapState, mapActions} from 'vuex'
 	// import work_type from '../../lib/api'
 	import searchPanel from '../../components/search-panel.vue'
+	// import model from '../../components/model.vue'
+	import xyDialog from '@/components/xy-dialog/xy-dialog.vue'
 	export default {
 		data() {
 			return {
@@ -88,6 +102,13 @@
 				duration: 500,
 				keyword: '',
 				showPanel: false, // 是否显示搜索历史面板
+				modelData:{
+					title:'hhh',
+					content: '你妹的',
+					okText: '确定',
+					closeText: '取消'
+				},
+				showDialog_1: false
 			}
 		},
 		computed: {
@@ -98,7 +119,9 @@
 			}),
 		},
 		components:{
-			searchPanel
+			searchPanel,
+			// model,
+			xyDialog
 		},
 		watch: {
 		    goods: function (val) {
@@ -231,6 +254,18 @@
 						alert('删除兼职失败！')
 					}
 				})
+			},
+			handleShow(type) {
+				this[`showDialog_${type}`] = true;
+			},
+			clickCancel(type) {
+				this[`showDialog_${type}`] = false;
+			},
+			clickConfirm(type) {
+				this[`showDialog_${type}`] = false;
+			},
+			handleActionShow() {
+				this.$refs.xyDialog.show()
 			}
 		},
 		onLoad() {
@@ -241,6 +276,9 @@
 </script>
 
 <style lang="scss" scoped>
+	.banner-img{
+		width: 100%;
+	}
 	.search {
 		padding: 20upx;
 	}
