@@ -32,13 +32,16 @@ app.all('*', function(req, res, next) {
 	// res.header("X-Powered-By",' 3.2.1')
 	// res.header("Content-Type", "application/json;charset=utf-8");
 
-	//TODO 支持跨域访问
-	// res.setHeader("Access-Control-Allow-Origin", "*"); //此项设置为*时无论怎么设置都不会带上cookie 请求的方法也获取不到数据
-	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // 设置具体的允许跨域的地址
-	res.setHeader("Access-Control-Allow-Credentials", "true"); // 允许请求携带cookie等凭据 
-	res.setHeader("Access-Control-Allow-Methods", "*");
-	res.setHeader("Access-Control-Allow-Headers", "*");
-	res.setHeader("Access-Control-Expose-Headers", "*");
+	 //TODO 支持跨域访问
+        // res.setHeader("Access-Control-Allow-Origin", "*"); //此项设置为*时无论怎么设置都不会带上cookie 请求的方法也获取不到数据
+        res.setHeader("Access-Control-Allow-Origin", "http://39.96.199.119:5000"); // 设置具体的允许跨域的地址
+        res.setHeader("Access-Control-Allow-Credentials", "true"); // 允许请求携带cookie
+       //       res.header("Access-Control-Allow-Headers", "X-Requested-With,access-token"); // 允许携带自定义头部信息
+        res.header("Access-Control-Allow-Headers", "X-Requested-With,refresh-token,access-token,authorization"); // 允许携带自定义头部信息
+        res.setHeader("Access-Control-Allow-Methods", "*");
+        //res.setHeader("Access-Control-Allow-Headers", "*");
+        res.setHeader("Access-Control-Expose-Headers", "*");
+
 
 // 	if (req.getMethod().equalss("OPTIONS")) {
 // 	    HttpUtil.setResponse(res, HttpStatus.OK.value(), null);
