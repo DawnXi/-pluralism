@@ -133,7 +133,7 @@
 	.list-item{
 		position: relative;
 		padding: 30upx;
-		margin: 0 30upx;
+		margin: 0 10upx;
 		border: #ddd solid 1px;
 		border-radius: 10upx;
 		text-align: left;
@@ -154,12 +154,12 @@
 		margin-top: 15upx;
 	}
 	.welfare .item{
-		padding: 5upx 20upx;
+		padding: 5upx 10upx;
 		background: #f3f3f3;
 		font-size: 14px;
 		color: #666;
 		border-radius: 10upx;
-		margin-right: 10upx;
+		margin-right: 15upx;
 		position: relative;
 	}
 	.salary{
@@ -206,5 +206,7 @@
 	uni-view.list-item {
 		padding-top: 0px;
 		margin-top: 50upx;
+		background: #fff;
+		box-shadow: 0px 0px 5px #ddd;
 	}
 </style>

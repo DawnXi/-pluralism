@@ -5,6 +5,16 @@
             <text class="title">{{title}}</text>
         </view> -->
 		<text>这个是首页</text>
+		<!-- <uniSwiperDot :info="info" :current="current" field="content" :mode="mode">
+			<swiper class="swiper-box" @change="change">
+				<swiper-item v-for="(item ,index) in info" :key="index">
+					<view class="swiper-item">
+						<img :src="'/static/images/banner'+ (index+1) +'.png'" alt="">
+						{{item.content}}
+					</view>
+				</swiper-item>
+			</swiper>
+		</uniSwiperDot> -->
 		<view class="banner">
 			<image class="banner-img" src="../../static/banner.png" mode="widthFix"></image>
 		</view>
@@ -20,7 +30,7 @@
 		
 		<!-- 兼职列表 -->
 		<view class="works-list">
-			<view class="item" v-for="n in 5" :key="n">
+			<!-- <view class="item" v-for="n in 5" :key="n" @click="toDetail(n)">
 				<div class="left">
 					<image class="img" src="../../static/ym.png" mode="widthFix"></image>
 					<view class="state">报名中</view>
@@ -35,6 +45,18 @@
 						</view>
 					</view>
 				</div>
+			</view>
+			 -->
+			<view class="item1"  v-for="n in 5" :key="n" @click="toDetail(n)">
+				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
+				<view class="info">
+					<view class="name">高薪中高端电话客服</view>
+					<view class="address"><i></i><text class="text">朝阳朝外，朝阳门，东大桥（据我2.0km）</text></view>
+					<view class="time"><i></i><text class="text">09月15日-12月15日，10：00-21：00</text></view>
+				</view>
+				<view class="price">180/天</view>
+				<view class="settlement">周结</view>
+				<view class="update">5分钟前</view>
 			</view>
 		</view>
 		
@@ -57,7 +79,7 @@
 		</view> -->
 		
 		<button size="mini" @tap="toList">跳转到列表页</button>
-		<button size="mini" @tap="toDetail">跳转到详情页</button>
+		<button size="mini" @tap="toDetail(5)">跳转到详情页</button>
 		<button size="mini" @click="test">测试axios</button>
 		<button size="mini" @click="goLogin" type="primary">跳转到注册页</button>
 		<button size="mini" @click="goRegister" type="primary">跳转到登陆页</button>
@@ -91,6 +113,7 @@
 	import searchPanel from '../../components/search-panel.vue'
 	// import model from '../../components/model.vue'
 	import xyDialog from '@/components/xy-dialog/xy-dialog.vue'
+	import uniSwiperDot from "../../components/uni-swiper-dot/uni-swiper-dot.vue"
 	export default {
 		data() {
 			return {
@@ -108,7 +131,17 @@
 					okText: '确定',
 					closeText: '取消'
 				},
-				showDialog_1: false
+				showDialog_1: false,
+				// 轮播相关
+				info: [{
+					content: '内容 A'
+				}, {
+					content: '内容 B'
+				}, {
+					content: '内容 C'
+				}],
+				current: 0,
+				mode: 'long',
 			}
 		},
 		computed: {
@@ -121,7 +154,8 @@
 		components:{
 			searchPanel,
 			// model,
-			xyDialog
+			xyDialog,
+			uniSwiperDot
 		},
 		watch: {
 		    goods: function (val) {
@@ -140,9 +174,9 @@
 			onFocus() {
 				this.showPanel = true;
 			},
-			toDetail () {
+			toDetail (id) {
 				uni.navigateTo({
-					url: '../../pages/detail/detail?id=5'
+					url: `../../pages/detail/detail?id=${id}`
 				})
 			},
 			test () {
@@ -331,41 +365,37 @@
 			margin-top:60upx;
 			position:relative;
 		}
-
-		.info {
-			position: absolute;
-			right:20upx;
-		}
 		
-		.works-list .item{
-			display: flex;
-			justify-content: space-between;
-			margin: 0 5%;
-			padding-bottom: 100upx;
-			border-bottom: #8f8f94;
-			color: #D8D8D8;
-			.left{
-				width: 20%;
-			}
-			.right {
-				width: 75%;
-			}
-			.img{
-				width: 100%;
-				height: 200upx;
-			}
-			.title{
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			.info {
-				width: 65%;
-				display: flex;
-				justify-content: space-between;
-				align-items: flex-end;
-			}
-		}
+// 		.works-list .item{
+// 			display: flex;
+// 			justify-content: space-between;
+// 			margin: 0 5%;
+// 			padding-bottom: 100upx;
+// 			border-bottom: #8f8f94;
+// 			color: #D8D8D8;
+// 			.left{
+// 				width: 20%;
+// 			}
+// 			.right {
+// 				width: 75%;
+// 			}
+// 			.img{
+// 				width: 100%;
+// 				height: 200upx;
+// 			}
+// 			.title{
+// 				white-space: nowrap;
+// 				overflow: hidden;
+// 				text-overflow: ellipsis;
+// 			}
+// 			.info {
+// 				width: 65%;
+// 				display: flex;
+// 				justify-content: space-between;
+// 				align-items: flex-end;
+// 			}
+// 		}
+// 
 </style>
 
 <!-- 字体图标相关 -->
@@ -378,4 +408,70 @@
         font-family: iconfont;
         margin-left: 20upx;
     }
+</style>
+
+
+
+<style scoped>
+	img.img {
+    width: 130upx;
+    height: 130upx;
+    border-radius: 130upx;
+    float: left;
+    margin-right: 10upx;
+	margin-top: 30upx;
+}
+
+.item1 {
+    text-align: left;
+    overflow: hidden;
+    padding: 20upx;
+    border: #ddd solid 1px;
+    margin: 20upx 10upx;
+	font-size: 10px;
+	color: #666;
+    position: relative;
+	background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px #ddd;
+}
+
+.price {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: red;
+}
+
+.settlement {
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    color: #fff;
+    padding: 0 5upx;
+    font-size: 0.65rem;
+    background: #1be3de;
+	border-radius: 5upx;
+}
+
+.update {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    color: red;
+}
+
+.info {
+    margin-left: 110upx;
+}
+.text{
+	font-size: 0.65rem;
+}
+.address{
+	margin-top: 20upx;
+}
+.name{
+	font-size: 36upx;
+	color: #000000;
+}
 </style>

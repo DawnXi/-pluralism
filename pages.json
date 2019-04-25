@@ -29,7 +29,7 @@
         },
         {
 //            "path" : "pages/list/list",
-            "path" : "pages/list/pages/list2detail-list/list2detail-list",
+            "path" : "pages/list5/pages/list2detail-list/list2detail-list",
             "style" : {
                 "navigationBarTitleText" : "兼职列表",
                 "enablePullDownRefresh" : true
@@ -49,11 +49,25 @@
         },
         {
 //            "path" : "pages/detail/detail",
-            "path" : "pages/list/pages/list2detail-detail/list2detail-detail",
+            "path" : "pages/list5/pages/list2detail-detail/list2detail-detail",
             "style" : {
                 "navigationBarTitleText" : "兼职详情"
             }
         },
+// 		{
+// 		//            "path" : "pages/detail/detail",
+// 			"path" : "pages/list/list",
+// 			"style" : {
+// 				"navigationBarTitleText" : "兼职详情"
+// 			}
+// 		},
+		{
+		//            "path" : "pages/detail/detail",
+			"path" : "pages/detail/detail",
+			"style" : {
+				"navigationBarTitleText" : "兼职详情"
+			}
+		},
         {
             "path" : "pages/uni-feedback/pages/uni-feedback/uni-feedback",
             "style" : {
@@ -66,6 +80,10 @@
         },
         {
             "path" : "pages/center/center",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/comments/comments",
             "style" : {}
         }
     ],
@@ -89,7 +107,7 @@
                 "text" : "首页"
             },
             {
-                "pagePath" : "pages/list/pages/list2detail-list/list2detail-list",
+                "pagePath" : "pages/recommend/recommend",
                 "iconPath" : "static/hot-0.png",
                 "selectedIconPath" : "static/hot-1.png",
                 "text" : "推荐"
