@@ -8,7 +8,7 @@
 // //
 // app.use(bodyParser.json()); // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-const sequelize = require('./models/sequelize');
+const DB = require('./models/DB');
 // const querystring = require('querystring');
 
 let express = require('express'),
@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-
 //设置跨域访问
 app.all('*', function(req, res, next) {
 	// res.header("Access-Control-Allow-Origin", "*");
@@ -34,7 +33,7 @@ app.all('*', function(req, res, next) {
 
 	 //TODO 支持跨域访问
         // res.setHeader("Access-Control-Allow-Origin", "*"); //此项设置为*时无论怎么设置都不会带上cookie 请求的方法也获取不到数据
-        res.setHeader("Access-Control-Allow-Origin", "http://39.96.199.119:5000"); // 设置具体的允许跨域的地址
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); // 设置具体的允许跨域的地址
         res.setHeader("Access-Control-Allow-Credentials", "true"); // 允许请求携带cookie
        //       res.header("Access-Control-Allow-Headers", "X-Requested-With,access-token"); // 允许携带自定义头部信息
         res.header("Access-Control-Allow-Headers", "X-Requested-With,refresh-token,access-token,authorization"); // 允许携带自定义头部信息
@@ -233,7 +232,7 @@ app.post('/api/delete_work/:id', (req,res) => {
 //以下这些API直接操作模型
 // 用户添加评论
 app.post('/api/add_comment', (req,res) => {
-    sequelize.models.comment.create(req.body).then( result => {
+    DB.models.comment.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -242,7 +241,7 @@ app.post('/api/add_comment', (req,res) => {
 
 // 删除用户评论
 app.post('/api/delete_comment/:id', (req,res) => {
-  sequelize.models.comment.destroy(
+  DB.models.comment.destroy(
     {
       where: {'id': Number(req.params.id)}
     }
@@ -256,16 +255,39 @@ app.post('/api/delete_comment/:id', (req,res) => {
 
 // 用户投递简历
 app.post('/api/add_delivery', (req,res) => {
-    sequelize.models.delivery.create(req.body).then( result => {
+    DB.models.delivery.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
     });
 });
 
+
+// 用户申请报名
+app.post('/api/apply', (req,res) => {
+    DB.models.apply.create(req.body).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 用户报名列表
+app.get('/api/get_apply', (req,res) => {
+	DB.models.apply.get_apply({
+		success(data) {
+			// console.log(data);
+			res.json(data);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
 // 用户添加收藏
 app.post('/api/add_collect', (req,res) => {
-    sequelize.models.collect.create(req.body).then( result => {
+    DB.models.collect.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -274,7 +296,7 @@ app.post('/api/add_collect', (req,res) => {
 
 //用户取消收藏
 app.post('/api/delete_collect/:id', (req,res) => {
-    sequelize.models.collect.destroy(
+    DB.models.collect.destroy(
         {
             where: {'id': Number(req.params.id)}
         }
@@ -284,6 +306,20 @@ app.post('/api/delete_collect/:id', (req,res) => {
         res.json(err);
     });
 });
+
+// 用户收藏列表
+app.post('/api/get_collect/:userId', (req,res) => {
+    DB.models.collect.get(
+        {
+            where: {'user_id': Number(req.params.userId)}
+        }
+    ).then(result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
 
 
 // 登录
@@ -304,6 +340,27 @@ app.post('/api/delete_collect/:id', (req,res) => {
 // 			res.end(JSON.stringify(err));
 // 		}
 // 	})
+// })
+
+// 注册
+// app.register('/api/register', (req,res) => {
+// 	console.log(1111)
+// 	console.log(req.body)
+// 	
+// 	sequelize.models.work.findAll({
+// 	    where: {username: req.boby.username}, // 查询条件
+// 	    raw: true
+// 	}).then(result => {
+// 	    // res.json({
+// 	    //     data: result
+// 	    // });
+// 		// 注册成功 签发token （加密的初步想法） (各种小程序中的登录的特殊处理) （支付宝订阅号开发） （node线上部署与性能优化）
+// 		//  (数据库性能优化 数据库集群 多库连接查询)  （服务器集群）  （支付宝支付  微信支付）  （地图开发）  （数据可视化 各种图标库应用）
+// 	}).catch(err => {
+// 	    console.log(err);
+// 	});
+// 	
+// 	
 // })
 
 let address = require('./models/address');

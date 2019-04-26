@@ -1,7 +1,7 @@
-const sequelize = require('./sequelize');
+const DB = require('./DB');
 
-sequelize.db.sync()
-	.then(() => sequelize.models.work_type.create({
+DB.db.sync()
+	.then(() => DB.models.WorkType.create({
 		name: '派单员',
 	}))
 	.then(jane => {
@@ -11,7 +11,7 @@ sequelize.db.sync()
 
 const work_type = {
 	get_type(options = {}) {
-		sequelize.models.work_type.findAll({raw: true}).then(res => {
+		DB.models.WorkType.findAll({raw: true}).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
@@ -23,7 +23,7 @@ const work_type = {
 	},
 	add_type(options = {}) {
 		console.log(options.data);
-		sequelize.models.work_type.create(options.data).then(res => {
+		DB.models.WorkType.create(options.data).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
@@ -34,7 +34,7 @@ const work_type = {
 		});
 	},
 	delete_type(options = {}) {
-		sequelize.models.work_type.destroy({
+		DB.models.WorkType.destroy({
 			where: options.data,
 			raw: true
 		}).then(res => {
@@ -49,7 +49,7 @@ const work_type = {
 		});
 	},
 	put_type(options = {}) {
-		sequelize.models.work_type.update({
+		DB.models.WorkType.update({
 			pram: options.data.pram,
 			where: options.data.where,
 			raw: true
