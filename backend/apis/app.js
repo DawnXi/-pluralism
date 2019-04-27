@@ -10,6 +10,9 @@
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const DB = require('./models/DB');
 // const querystring = require('querystring');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
+
 
 let express = require('express'),
 	bodyParser = require('body-parser'),
@@ -60,7 +63,7 @@ app.get('/test2', (req,res) => {
     console.log(666);
     console.log(data);
     // console.log(JSON.parse(querystring.parse(data).filter));
-    sequelize.models.work.findAll({
+    DB.models.Work.findAll({
         offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
         limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
         where: data.filter ? JSON.parse(data.filter) : {}, // 查询条件
@@ -93,8 +96,38 @@ app.get('/get-user', (req,res) => {
 	})
 });
 
+// 修改用户信息
+app.post('/update-user/:id', (req,res) => {
+	 DB.models.User.update(
+		{
+			name: '我被修改了',
+		},
+		{
+			where: {
+				id: Number(req.params.id)
+			}
+		}
+	).then( result => {
+	    res.json(result);
+	}).catch(err => {
+	    res.json(err);
+	});
+});
+// 删除用户
+app.post('/delete-user/:id', (req,res) => {
+	 DB.models.Resume.destroy({
+		where: {
+			id: Number(req.params.id)
+		}
+	}).then( result => {
+	    res.json(result);
+	}).catch(err => {
+	    res.json(err);
+	});
+});
+
 // 查询分类列表
-app.get('/api/get_type', (req,res) => {
+app.get('/api/get-type', (req,res) => {
 	typeApi.get_type({
 		success(data) {
 			// console.log(data);
@@ -107,7 +140,7 @@ app.get('/api/get_type', (req,res) => {
 });
 
 // 添加分类
-app.post('/api/add_type', (req,res) => {
+app.post('/api/add-type', (req,res) => {
 	typeApi.add_type({
 		data: req.body,
 		success(data) {
@@ -121,7 +154,7 @@ app.post('/api/add_type', (req,res) => {
 });
 
 // 修改分类
-app.post('/api/put_type', (req,res) => {
+app.post('/api/put-type', (req,res) => {
 	typeApi.put_type({
 		data: {
             param: req.body,
@@ -139,7 +172,7 @@ app.post('/api/put_type', (req,res) => {
 
 
 // 删除分类
-app.post('/api/delete_type', (req,res) => {
+app.post('/api/delete-type', (req,res) => {
 	typeApi.delete_type({
 		data: {
             where: {'id': Number(req.params.id)},
@@ -157,16 +190,71 @@ app.post('/api/delete_type', (req,res) => {
 
 // 查询兼职列表
 // 添加模糊查询和分类查询
-app.get('/api/get_work', (req,res) => {
+app.get('/api/get-work', (req,res) => {
     let data = req.query;
+	// 找出查询参数
+	let queryFilters=[];
+	let queryLikes=[];
+	let filterDataStr = ''
+	let likeDataStr = ''
+	let filterData = '';
+	let likeData = '';
+	let dataArry = Object.keys(data);
+	if (dataArry.length>1) {
+		let key = ''
+		dataArry.map((item,index) => {
+			let pushItem = ''
+			if (/filter_/.test(item)) {
+				key = item.replace('filter_', '')
+				pushItem = `{"${key}": "${data[item]}"}`
+				queryFilters.push(JSON.parse(pushItem))
+			} else if (/like_/.test(item)) {
+				key = item.replace('like_', '')
+				pushItem = `{"${key}": "{[Op.like]: '%${data[item]}%'}"}`,
+				queryLikes.push(JSON.parse(pushItem))
+			}
+			console.log(key)
+		})
+		queryFilters = JSON.stringify(queryFilters);
+		queryLikes = JSON.stringify(queryLikes);
+		filterDataStr = queryFilters.replace(/ /g,'').replace(/\[\{/, '{').replace(/\}\]/, '}').replace(/\}\,\{/g,',')
+		likeDataStr = queryLikes.replace(/ /g,'').replace(/\[\{/, '{').replace(/\}\]/, '}').replace(/\}\,\{/g,',')
+		filterData = JSON.parse(filterDataStr);
+		likeData = JSON.parse(likeDataStr);
+		console.log('----------------------------------------------------------------------------')
+		console.log(filterData);
+		console.log(likeData);
+	}
     console.log(1111111111111);
 	console.log(data);
-    sequelize.models.work.findAll({
-        offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
-        limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
-        where: JSON.parse(data.filter ? data.filter : "{}"), // 查询条件（按条件过滤）
-		like: data.like ? data.like : '', // 模糊查询
-        raw: true
+	console.log(queryFilters)
+	console.log(queryLikes)
+
+    DB.models.Work.findAll({
+  //       offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+  //       limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+  //       where: JSON.parse(data.filter ? data.filter : "{}"), // 查询条件（按条件过滤）
+		// like: data.like ? data.like : '', // 模糊查询
+  //       raw: true,
+		// include: [ DB.models.Collect,DB.models.Comment,DB.models.Apply ]
+		include: [ 
+			{
+			  model: DB.models.Collect,
+			},
+			{
+			  model: DB.models.Comment,
+			},
+			{
+			  model: DB.models.Apply,
+			},
+		],
+		offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+		limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+		where: filterData, // 查询条件（按条件过滤）
+		// like: data.like ? data.like : '', // 模糊查询
+		// like: likeData,
+		where: {tag:{[Op.like]: '%农夫%'}}
+		// raw: true,
     }).then(result => {
         res.json({
             data: result
@@ -176,8 +264,38 @@ app.get('/api/get_work', (req,res) => {
     });
 });
 
+// 查询兼职详情
+app.get('/api/work-detail/:id', (req,res) => {
+	let data ={
+		id: Number(req.params.id)
+	}
+	DB.models.Work.findAll({
+		include: [
+			{
+				model: DB.models.Collect,
+			},
+			{
+				model: DB.models.Comment,
+			},
+			{
+				model: DB.models.Apply,
+			},
+		],
+		offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+		limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+		where: data
+		// raw: true,
+	}).then(result => {
+		res.json({
+			data: result
+		});
+	}).catch(err => {
+		console.log(err);
+	});
+});
+
 // 添加兼职
-app.post('/api/add_work', (req,res) => {
+app.post('/api/add-work', (req,res) => {
 	workApi.add_work({
 		data: req.body,
 		success(data) {
@@ -192,7 +310,7 @@ app.post('/api/add_work', (req,res) => {
 });
 
 // 修改兼职
-app.post('/api/put_work/:id', (req,res) => {
+app.post('/api/put-work/:id', (req,res) => {
 	console.log('请求参数');
 	console.log(req.body);
 	// let param = req.body;
@@ -213,7 +331,7 @@ app.post('/api/put_work/:id', (req,res) => {
 
 
 // 删除兼职
-app.post('/api/delete_work/:id', (req,res) => {
+app.post('/api/delete-work/:id', (req,res) => {
 	workApi.delete_work({
 		data: {
 			where: {'id': Number(req.params.id)},
@@ -231,7 +349,7 @@ app.post('/api/delete_work/:id', (req,res) => {
 
 //以下这些API直接操作模型
 // 用户添加评论
-app.post('/api/add_comment', (req,res) => {
+app.post('/api/add-comment', (req,res) => {
     DB.models.comment.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
@@ -240,7 +358,7 @@ app.post('/api/add_comment', (req,res) => {
 });
 
 // 删除用户评论
-app.post('/api/delete_comment/:id', (req,res) => {
+app.post('/api/delete-comment/:id', (req,res) => {
   DB.models.comment.destroy(
     {
       where: {'id': Number(req.params.id)}
@@ -254,7 +372,7 @@ app.post('/api/delete_comment/:id', (req,res) => {
 
 
 // 用户投递简历
-app.post('/api/add_delivery', (req,res) => {
+app.post('/api/add-delivery', (req,res) => {
     DB.models.delivery.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
@@ -265,7 +383,40 @@ app.post('/api/add_delivery', (req,res) => {
 
 // 用户申请报名
 app.post('/api/apply', (req,res) => {
-    DB.models.apply.create(req.body).then( result => {
+    DB.models.Apply.create({
+		workId: 7,
+		userId: 5
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+	
+	
+	// if (req.params.user_id &&  req.params.work_id) {
+	// 	 DB.models.Apply.create({
+	// 		workId: Number(req.params.user_id),
+	// 		userId: Number(req.params.work_id)
+	// 	}).then( result => {
+	// 	    res.json(result);
+	// 	}).catch(err => {
+	// 	    res.json(err);
+	// 	});
+	// } else if (!req.params.user_id) {
+	// 	
+	// 	res.json('work_id is require！')
+	// } else if (!req.params.work_id) {
+	// 	res.json('user_id is require！')
+	// }
+});
+
+// 用户取消报名
+app.get('/api/delete-apply', (req,res) => {
+	DB.models.Apply.destroy({
+		where: {
+			userId: req.query.user_id
+		}
+	}).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -273,21 +424,25 @@ app.post('/api/apply', (req,res) => {
 });
 
 // 用户报名列表
-app.get('/api/get_apply', (req,res) => {
-	DB.models.apply.get_apply({
-		success(data) {
-			// console.log(data);
-			res.json(data);
+app.get('/api/get-apply', (req,res) => {
+	DB.models.Apply.findAll({
+		where: {
+			userId: req.query.user_id
 		},
-		failed(err) {
-			console.log(err);
-		}
-	})
+		include: [DB.models.Work],
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
 });
 
 // 用户添加收藏
-app.post('/api/add_collect', (req,res) => {
-    DB.models.collect.create(req.body).then( result => {
+app.post('/api/add-collect/:work_id', (req,res) => {
+    DB.models.Collect.create({
+		workId: Number(req.params.work_id),
+		userId: 1
+	}).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -295,32 +450,116 @@ app.post('/api/add_collect', (req,res) => {
 });
 
 //用户取消收藏
-app.post('/api/delete_collect/:id', (req,res) => {
-    DB.models.collect.destroy(
-        {
-            where: {'id': Number(req.params.id)}
-        }
-    ).then(result => {
-        res.json(result);
-    }).catch(err => {
-        res.json(err);
-    });
+app.post('/api/delete-collect/:id', (req,res) => {
+	if (req.query.work_id && req.query.user_id) {
+		DB.models.Collect.destroy(
+			{
+				where: {
+					'id': Number(req.params.id),
+					'workId': req.query.work_id,
+					'userId': req.query.user_id
+				}
+			}
+		).then(result => {
+			res.json(result);
+		}).catch(err => {
+			res.json(err);
+		});
+	} else {
+		res.json('404');
+	}
+
 });
 
 // 用户收藏列表
-app.post('/api/get_collect/:userId', (req,res) => {
-    DB.models.collect.get(
-        {
-            where: {'user_id': Number(req.params.userId)}
-        }
-    ).then(result => {
+app.get('/api/get-collect', (req,res) => {
+    DB.models.Collect.findAll({
+		include: [
+			{
+				model: DB.models.Work
+			}
+		],
+		// 复合查询
+		where: {
+			[Op.or]: [
+				{
+					userId: req.query.user_id
+				},
+				{
+					workId: req.query.work_id
+				},
+				{
+					id: req.query.id
+				},
+			]
+		}
+	}).then(result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
     });
 });
 
+// 简历列表
+app.get('/api/get-resume', (req,res) => {
+	DB.models.Resume.findAll({
+		where: {
+			userId: req.query.user_id
+		}
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
 
+// 创建简历
+app.post('/api/add-resume', (req,res) => {
+    DB.models.Resume.create({
+		name: 'Sequelize.STRING',
+		birthday: 'Sequelize.DATE',  
+		skills: 'Sequelize.STRING',
+		experience: 'Sequelize.STRING',
+		phone: 'Sequelize.STRING(11)',
+		address: 'Sequelize.STRING'
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 修改简历
+app.post('/api/update-resume/:id', (req,res) => {
+	// 修改的正确语法
+    DB.models.Resume.update(
+		{
+			name: '我被修改了',
+		},
+		{
+			where: {
+				id: Number(req.params.id)
+			}
+		}
+	).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 删除简历
+app.post('/api/delete-resume/:id', (req,res) => {
+    DB.models.Resume.destroy({
+		where: {
+			id: Number(req.params.id)
+		}
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
 
 // 登录
 // app.post('/api/login', (req,res) => {
@@ -467,5 +706,7 @@ function authenticateRequest(req, res, next) {
 		});
 }
 // todo 把路由提取出来
+// todo 图片上传接口 把图片上传到七牛云
+
 
 app.listen(888);
