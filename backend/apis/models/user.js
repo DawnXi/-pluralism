@@ -31,7 +31,7 @@ const userApi = {
 		});
 	},
 	getUserInfo(options = {}) {
-		DB.models.User.findAll({ include: [ DB.models.Collect,DB.models.Comment,DB.Apply ] }).then(res => {
+		DB.models.User.findAll({ include: [ DB.models.Collect,DB.models.Comment,DB.models.Apply ] }).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}

@@ -11,7 +11,7 @@ DB.db.sync()
 
 const work_type = {
 	get_type(options = {}) {
-		DB.models.WorkType.findAll({raw: true}).then(res => {
+		DB.models.WorkType.findAll({raw: true,include: [ DB.models.Work ]}).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
