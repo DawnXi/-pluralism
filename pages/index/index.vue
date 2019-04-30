@@ -15,8 +15,7 @@
 		<searchPanel v-if='showPanel'></searchPanel>
 		
 		<!-- 兼职列表 -->
-		<view class="works-list">
-		</view>
+		<List></List>
 		
 		 <!-- 自定义的弹出框 -->
 		<button type="primary" size="mini" @click="handleShow(1)">查看</button>
@@ -37,6 +36,7 @@
 	// import model from '../../components/model.vue'
 	import xyDialog from '@/components/xy-dialog/xy-dialog.vue'
 	import uniSwiperDot from "../../components/uni-swiper-dot/uni-swiper-dot.vue"
+	import List from "@/components/list"
 	export default {
 		data() {
 			return {
@@ -78,7 +78,8 @@
 			searchPanel,
 			// model,
 			xyDialog,
-			uniSwiperDot
+			uniSwiperDot,
+			List
 		},
 		watch: {
 		    goods: function (val) {
