@@ -8,8 +8,11 @@
 // //
 // app.use(bodyParser.json()); // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-const sequelize = require('./models/sequelize');
+const DB = require('./models/DB');
 // const querystring = require('querystring');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
+
 
 let express = require('express'),
 	bodyParser = require('body-parser'),
@@ -23,7 +26,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-
 //设置跨域访问
 app.all('*', function(req, res, next) {
 	// res.header("Access-Control-Allow-Origin", "*");
@@ -32,12 +34,16 @@ app.all('*', function(req, res, next) {
 	// res.header("X-Powered-By",' 3.2.1')
 	// res.header("Content-Type", "application/json;charset=utf-8");
 
-	//TODO 支持跨域访问
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Credentials", "true");
-	res.setHeader("Access-Control-Allow-Methods", "*");
-	res.setHeader("Access-Control-Allow-Headers", "*");
-	res.setHeader("Access-Control-Expose-Headers", "*");
+	 //TODO 支持跨域访问
+        // res.setHeader("Access-Control-Allow-Origin", "*"); //此项设置为*时无论怎么设置都不会带上cookie 请求的方法也获取不到数据
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); // 设置具体的允许跨域的地址
+        res.setHeader("Access-Control-Allow-Credentials", "true"); // 允许请求携带cookie
+       //       res.header("Access-Control-Allow-Headers", "X-Requested-With,access-token"); // 允许携带自定义头部信息
+        res.header("Access-Control-Allow-Headers", "X-Requested-With,refresh-token,access-token,authorization"); // 允许携带自定义头部信息
+        res.setHeader("Access-Control-Allow-Methods", "*");
+        //res.setHeader("Access-Control-Allow-Headers", "*");
+        res.setHeader("Access-Control-Expose-Headers", "*");
+
 
 // 	if (req.getMethod().equalss("OPTIONS")) {
 // 	    HttpUtil.setResponse(res, HttpStatus.OK.value(), null);
@@ -57,7 +63,7 @@ app.get('/test2', (req,res) => {
     console.log(666);
     console.log(data);
     // console.log(JSON.parse(querystring.parse(data).filter));
-    sequelize.models.work.findAll({
+    DB.models.Work.findAll({
         offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
         limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
         where: data.filter ? JSON.parse(data.filter) : {}, // 查询条件
@@ -90,8 +96,38 @@ app.get('/get-user', (req,res) => {
 	})
 });
 
+// 修改用户信息
+app.post('/update-user/:id', (req,res) => {
+	 DB.models.User.update(
+		{
+			name: '我被修改了',
+		},
+		{
+			where: {
+				id: Number(req.params.id)
+			}
+		}
+	).then( result => {
+	    res.json(result);
+	}).catch(err => {
+	    res.json(err);
+	});
+});
+// 删除用户
+app.post('/delete-user/:id', (req,res) => {
+	 DB.models.Resume.destroy({
+		where: {
+			id: Number(req.params.id)
+		}
+	}).then( result => {
+	    res.json(result);
+	}).catch(err => {
+	    res.json(err);
+	});
+});
+
 // 查询分类列表
-app.get('/api/get_type', (req,res) => {
+app.get('/api/get-type', (req,res) => {
 	typeApi.get_type({
 		success(data) {
 			// console.log(data);
@@ -104,7 +140,7 @@ app.get('/api/get_type', (req,res) => {
 });
 
 // 添加分类
-app.post('/api/add_type', (req,res) => {
+app.post('/api/add-type', (req,res) => {
 	typeApi.add_type({
 		data: req.body,
 		success(data) {
@@ -118,7 +154,7 @@ app.post('/api/add_type', (req,res) => {
 });
 
 // 修改分类
-app.post('/api/put_type', (req,res) => {
+app.post('/api/put-type', (req,res) => {
 	typeApi.put_type({
 		data: {
             param: req.body,
@@ -136,7 +172,7 @@ app.post('/api/put_type', (req,res) => {
 
 
 // 删除分类
-app.post('/api/delete_type', (req,res) => {
+app.post('/api/delete-type', (req,res) => {
 	typeApi.delete_type({
 		data: {
             where: {'id': Number(req.params.id)},
@@ -154,16 +190,71 @@ app.post('/api/delete_type', (req,res) => {
 
 // 查询兼职列表
 // 添加模糊查询和分类查询
-app.get('/api/get_work', (req,res) => {
+app.get('/api/get-work', (req,res) => {
     let data = req.query;
+	// 找出查询参数
+	let queryFilters=[];
+	let queryLikes=[];
+	let filterDataStr = ''
+	let likeDataStr = ''
+	let filterData = '';
+	let likeData = '';
+	let dataArry = Object.keys(data);
+	if (dataArry.length>1) {
+		let key = ''
+		dataArry.map((item,index) => {
+			let pushItem = ''
+			if (/filter_/.test(item)) {
+				key = item.replace('filter_', '')
+				pushItem = `{"${key}": "${data[item]}"}`
+				queryFilters.push(JSON.parse(pushItem))
+			} else if (/like_/.test(item)) {
+				key = item.replace('like_', '')
+				pushItem = `{"${key}": "{[Op.like]: '%${data[item]}%'}"}`,
+				queryLikes.push(JSON.parse(pushItem))
+			}
+			console.log(key)
+		})
+		queryFilters = JSON.stringify(queryFilters);
+		queryLikes = JSON.stringify(queryLikes);
+		filterDataStr = queryFilters.replace(/ /g,'').replace(/\[\{/, '{').replace(/\}\]/, '}').replace(/\}\,\{/g,',')
+		likeDataStr = queryLikes.replace(/ /g,'').replace(/\[\{/, '{').replace(/\}\]/, '}').replace(/\}\,\{/g,',')
+		filterData = JSON.parse(filterDataStr);
+		likeData = JSON.parse(likeDataStr);
+		console.log('----------------------------------------------------------------------------')
+		console.log(filterData);
+		console.log(likeData);
+	}
     console.log(1111111111111);
 	console.log(data);
-    sequelize.models.work.findAll({
-        offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
-        limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
-        where: JSON.parse(data.filter ? data.filter : "{}"), // 查询条件（按条件过滤）
-		like: data.like ? data.like : '', // 模糊查询
-        raw: true
+	console.log(queryFilters)
+	console.log(queryLikes)
+
+    DB.models.Work.findAll({
+  //       offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+  //       limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+  //       where: JSON.parse(data.filter ? data.filter : "{}"), // 查询条件（按条件过滤）
+		// like: data.like ? data.like : '', // 模糊查询
+  //       raw: true,
+		// include: [ DB.models.Collect,DB.models.Comment,DB.models.Apply ]
+		include: [ 
+			{
+			  model: DB.models.Collect,
+			},
+			{
+			  model: DB.models.Comment,
+			},
+			{
+			  model: DB.models.Apply,
+			},
+		],
+		offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+		limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+		where: filterData, // 查询条件（按条件过滤）
+		// like: data.like ? data.like : '', // 模糊查询
+		// like: likeData,
+		where: {tag:{[Op.like]: '%农夫%'}}
+		// raw: true,
     }).then(result => {
         res.json({
             data: result
@@ -173,8 +264,38 @@ app.get('/api/get_work', (req,res) => {
     });
 });
 
+// 查询兼职详情
+app.get('/api/work-detail/:id', (req,res) => {
+	let data ={
+		id: Number(req.params.id)
+	}
+	DB.models.Work.findAll({
+		include: [
+			{
+				model: DB.models.Collect,
+			},
+			{
+				model: DB.models.Comment,
+			},
+			{
+				model: DB.models.Apply,
+			},
+		],
+		offset: (data.size && data.page) ? (Number(data.page) - 1) * data.size : 0, // 默认不跳过（显示第一页数据）
+		limit: data.size ? (Number(data.size)) : 100, // 分页大小  默认100
+		where: data
+		// raw: true,
+	}).then(result => {
+		res.json({
+			data: result
+		});
+	}).catch(err => {
+		console.log(err);
+	});
+});
+
 // 添加兼职
-app.post('/api/add_work', (req,res) => {
+app.post('/api/add-work', (req,res) => {
 	workApi.add_work({
 		data: req.body,
 		success(data) {
@@ -189,7 +310,7 @@ app.post('/api/add_work', (req,res) => {
 });
 
 // 修改兼职
-app.post('/api/put_work/:id', (req,res) => {
+app.post('/api/put-work/:id', (req,res) => {
 	console.log('请求参数');
 	console.log(req.body);
 	// let param = req.body;
@@ -210,7 +331,7 @@ app.post('/api/put_work/:id', (req,res) => {
 
 
 // 删除兼职
-app.post('/api/delete_work/:id', (req,res) => {
+app.post('/api/delete-work/:id', (req,res) => {
 	workApi.delete_work({
 		data: {
 			where: {'id': Number(req.params.id)},
@@ -228,8 +349,8 @@ app.post('/api/delete_work/:id', (req,res) => {
 
 //以下这些API直接操作模型
 // 用户添加评论
-app.post('/api/add_comment', (req,res) => {
-    sequelize.models.comment.create(req.body).then( result => {
+app.post('/api/add-comment', (req,res) => {
+    DB.models.comment.create(req.body).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -237,8 +358,8 @@ app.post('/api/add_comment', (req,res) => {
 });
 
 // 删除用户评论
-app.post('/api/delete_comment/:id', (req,res) => {
-  sequelize.models.comment.destroy(
+app.post('/api/delete-comment/:id', (req,res) => {
+  DB.models.comment.destroy(
     {
       where: {'id': Number(req.params.id)}
     }
@@ -251,8 +372,65 @@ app.post('/api/delete_comment/:id', (req,res) => {
 
 
 // 用户投递简历
-app.post('/api/add_delivery', (req,res) => {
-    sequelize.models.delivery.create(req.body).then( result => {
+app.post('/api/add-delivery', (req,res) => {
+    DB.models.delivery.create(req.body).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+
+// 用户申请报名
+app.post('/api/apply', (req,res) => {
+    DB.models.Apply.create({
+		workId: 7,
+		userId: 5
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+	
+	
+	// if (req.params.user_id &&  req.params.work_id) {
+	// 	 DB.models.Apply.create({
+	// 		workId: Number(req.params.user_id),
+	// 		userId: Number(req.params.work_id)
+	// 	}).then( result => {
+	// 	    res.json(result);
+	// 	}).catch(err => {
+	// 	    res.json(err);
+	// 	});
+	// } else if (!req.params.user_id) {
+	// 	
+	// 	res.json('work_id is require！')
+	// } else if (!req.params.work_id) {
+	// 	res.json('user_id is require！')
+	// }
+});
+
+// 用户取消报名
+app.get('/api/delete-apply', (req,res) => {
+	DB.models.Apply.destroy({
+		where: {
+			userId: req.query.user_id
+		}
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 用户报名列表
+app.get('/api/get-apply', (req,res) => {
+	DB.models.Apply.findAll({
+		where: {
+			userId: req.query.user_id
+		},
+		include: [DB.models.Work],
+	}).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -260,8 +438,11 @@ app.post('/api/add_delivery', (req,res) => {
 });
 
 // 用户添加收藏
-app.post('/api/add_collect', (req,res) => {
-    sequelize.models.collect.create(req.body).then( result => {
+app.post('/api/add-collect/:work_id', (req,res) => {
+    DB.models.Collect.create({
+		workId: Number(req.params.work_id),
+		userId: 1
+	}).then( result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
@@ -269,18 +450,116 @@ app.post('/api/add_collect', (req,res) => {
 });
 
 //用户取消收藏
-app.post('/api/delete_collect/:id', (req,res) => {
-    sequelize.models.collect.destroy(
-        {
-            where: {'id': Number(req.params.id)}
-        }
-    ).then(result => {
+app.post('/api/delete-collect/:id', (req,res) => {
+	if (req.query.work_id && req.query.user_id) {
+		DB.models.Collect.destroy(
+			{
+				where: {
+					'id': Number(req.params.id),
+					'workId': req.query.work_id,
+					'userId': req.query.user_id
+				}
+			}
+		).then(result => {
+			res.json(result);
+		}).catch(err => {
+			res.json(err);
+		});
+	} else {
+		res.json('404');
+	}
+
+});
+
+// 用户收藏列表
+app.get('/api/get-collect', (req,res) => {
+    DB.models.Collect.findAll({
+		include: [
+			{
+				model: DB.models.Work
+			}
+		],
+		// 复合查询
+		where: {
+			[Op.or]: [
+				{
+					userId: req.query.user_id
+				},
+				{
+					workId: req.query.work_id
+				},
+				{
+					id: req.query.id
+				},
+			]
+		}
+	}).then(result => {
         res.json(result);
     }).catch(err => {
         res.json(err);
     });
 });
 
+// 简历列表
+app.get('/api/get-resume', (req,res) => {
+	DB.models.Resume.findAll({
+		where: {
+			userId: req.query.user_id
+		}
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 创建简历
+app.post('/api/add-resume', (req,res) => {
+    DB.models.Resume.create({
+		name: 'Sequelize.STRING',
+		birthday: 'Sequelize.DATE',  
+		skills: 'Sequelize.STRING',
+		experience: 'Sequelize.STRING',
+		phone: 'Sequelize.STRING(11)',
+		address: 'Sequelize.STRING'
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 修改简历
+app.post('/api/update-resume/:id', (req,res) => {
+	// 修改的正确语法
+    DB.models.Resume.update(
+		{
+			name: '我被修改了',
+		},
+		{
+			where: {
+				id: Number(req.params.id)
+			}
+		}
+	).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
+
+// 删除简历
+app.post('/api/delete-resume/:id', (req,res) => {
+    DB.models.Resume.destroy({
+		where: {
+			id: Number(req.params.id)
+		}
+	}).then( result => {
+        res.json(result);
+    }).catch(err => {
+        res.json(err);
+    });
+});
 
 // 登录
 // app.post('/api/login', (req,res) => {
@@ -301,6 +580,105 @@ app.post('/api/delete_collect/:id', (req,res) => {
 // 		}
 // 	})
 // })
+
+// 注册
+// app.register('/api/register', (req,res) => {
+// 	console.log(1111)
+// 	console.log(req.body)
+// 	
+// 	sequelize.models.work.findAll({
+// 	    where: {username: req.boby.username}, // 查询条件
+// 	    raw: true
+// 	}).then(result => {
+// 	    // res.json({
+// 	    //     data: result
+// 	    // });
+// 		// 注册成功 签发token （加密的初步想法） (各种小程序中的登录的特殊处理) （支付宝订阅号开发） （node线上部署与性能优化）
+// 		//  (数据库性能优化 数据库集群 多库连接查询)  （服务器集群）  （支付宝支付  微信支付）  （地图开发）  （数据可视化 各种图标库应用）
+// 	}).catch(err => {
+// 	    console.log(err);
+// 	});
+// 	
+// 	
+// })
+
+let address = require('./models/address');
+
+// 省份查询接口
+app.get('/api/get-address/provinces', (req,res) => {
+	address.getProvince({
+		data: {
+			province: req.query.province
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	}) 
+});
+
+// 城市查询接口
+app.get('/api/get-address/cities', (req,res) => {
+	address.getCities({
+		data: {
+			province: req.query.province
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// 县区查询接口
+app.get('/api/get-address/area', (req,res) => {
+    address.getArea({
+		data: {
+			cities: req.query.cities
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+// 街道查询接口
+app.get('/api/get-address/street', (req,res) => {
+	address.getStreet({
+		data: {
+			cities: req.query.cities,
+			area: req.query.area
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// // 测试连接
+// sequelize.authenticate()
+// 	.then(() => {
+// 		console.log('Connection has been established successfully.');
+// 	})
+// 	.catch(err => {
+// 		console.error('Unable to connect to the database:', err);
+// 	});
 
 // 获取用户信息
 app.oauth = new OAuth2Server({
@@ -355,5 +733,7 @@ function authenticateRequest(req, res, next) {
 		});
 }
 // todo 把路由提取出来
+// todo 图片上传接口 把图片上传到七牛云
+
 
 app.listen(888);

@@ -30,7 +30,7 @@ let config = {
 };
 
 // 连接数据库，获取用户数据
-const sequelize = require('./sequelize');
+const sequelize = require('./DB');
 
 /**
  * Dump the memory storage content (for debug).
