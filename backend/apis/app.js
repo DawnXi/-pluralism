@@ -604,18 +604,48 @@ app.post('/api/delete-resume/:id', (req,res) => {
 
 let address = require('./models/address');
 
-// 地址查询接口
-app.get('/api/getAddress/area', (req,res) => {
-    let data = req.query;
-    console.log(1111111111111);
-	console.log(data);
+// 省份查询接口
+app.get('/api/get-address/provinces', (req,res) => {
+	address.getProvince({
+		data: {
+			province: req.query.province
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	}) 
+});
+
+// 城市查询接口
+app.get('/api/get-address/cities', (req,res) => {
+	address.getCities({
+		data: {
+			province: req.query.province
+		},
+		success(result) {
+			// console.log(data);
+			res.json(result);
+		},
+		failed(err) {
+			console.log(err);
+		}
+	})
+});
+
+
+// 县区查询接口
+app.get('/api/get-address/area', (req,res) => {
     address.getArea({
 		data: {
-			area: req.query.area
+			cities: req.query.cities
 		},
-		success(data) {
+		success(result) {
 			// console.log(data);
-			
+			res.json(result);
 		},
 		failed(err) {
 			console.log(err);
@@ -624,18 +654,15 @@ app.get('/api/getAddress/area', (req,res) => {
 });
 
 // 街道查询接口
-app.get('/api/getAddress/street', (req,res) => {
-    let data = req.query;
-    console.log(1111111111111);
-	console.log(data);
+app.get('/api/get-address/street', (req,res) => {
 	address.getStreet({
 		data: {
-			area: req.query.area,
-			street: req.query.street
+			cities: req.query.cities,
+			area: req.query.area
 		},
-		success(data) {
+		success(result) {
 			// console.log(data);
-			res.json(data);
+			res.json(result);
 		},
 		failed(err) {
 			console.log(err);
