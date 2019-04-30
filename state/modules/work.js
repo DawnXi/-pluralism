@@ -1,5 +1,5 @@
 import QueryString from 'query-string';
-let base = 'http://39.96.199.119:888/api';
+import {baseUrl} from '/env.js'
 const work = {
   namespaced: true,
   state: {
@@ -53,7 +53,7 @@ const work = {
      */
     getWorks: ({ state, commit }, options = {}) => {
         uni.request({
-            url: base + `/get_work`,
+            url: baseUrl + `/get_work`,
             method: 'GET',
             header: {
                 'custom-header': 'hello' //自定义请求头信息
@@ -71,84 +71,27 @@ const work = {
             }
         });
     },
-    /**
-     * 添加兼职
-     * @param state
-     * @param commit
-     * @param options
-     */
-	addWork: ({ state, commit }, options = {}) => {
-        uni.request({
-            url: base + `/add_work`,
-            data: options.data,
-            method: 'POST',
-            header: {
-                'custom-header': 'hello' //自定义请求头信息
-            },
-            success: (res) => {
-                if (options.success && typeof(options.success) === 'function') {
-                    options.success(res.data);
-                }
-            },
-            fail: (err) => {
-                if (options.failed && typeof(options.failed) === 'function') {
-                    options.failed(err);
-                }
-            }
-        });
-	},
-      /**
-       * 更新兼职
-       * @param state
-       * @param commit
-       * @param options
-       */
-      putWork: ({ state, commit }, options = {}) => {
-          uni.request({
-              url: base + `/put_work/${options.data.id}`,
-              data: options.data,
-              method: 'POST',
-              header: {
-                  'custom-header': 'hello' //自定义请求头信息
-              },
-              success: (res) => {
-                  if (options.success && typeof(options.success) === 'function') {
-                      options.success(res.data);
-                  }
-              },
-              fail: (err) => {
-                  if (options.failed && typeof(options.failed) === 'function') {
-                      options.failed(err);
-                  }
+	
+    getWorkDetail: ({ state, commit }, options = {}) => {
+      uni.request({
+          url: baseUrl + `/get_work`,
+          method: 'GET',
+          header: {
+              'custom-header': 'hello' //自定义请求头信息
+          },
+          success: (res) => {
+              commit('setData', res.data);
+              if (options.success && typeof(options.success) === 'function') {
+                  options.success(res.data);
               }
-          });
-      },
-      /**
-       * 删除兼职
-       * @param state
-       * @param commit
-       * @param options
-       */
-      deleteWork: ({ state, commit }, options = {}) => {
-          uni.request({
-              url: base + `/delete_work/${options.data.id}`,
-              data: options.data,
-              method: 'POST',
-              header: {
-                  'custom-header': 'hello' //自定义请求头信息
-              },
-              success: (res) => {
-                  if (options.success && typeof(options.success) === 'function') {
-                      options.success(res.data);
-                  }
-              },
-              fail: (err) => {
-                  if (options.failed && typeof(options.failed) === 'function') {
-                      options.failed(err);
-                  }
+          },
+          fail: (err) => {
+              if (options.failed && typeof(options.failed) === 'function') {
+                  options.failed(err);
               }
-          });
-      }
+          }
+      });
+    }
   }
 };
 
