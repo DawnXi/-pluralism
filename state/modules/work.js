@@ -1,5 +1,5 @@
 import QueryString from 'query-string';
-import {baseUrl} from '/env.js'
+import {baseUrl} from 'env.js'
 const work = {
   namespaced: true,
   state: {
