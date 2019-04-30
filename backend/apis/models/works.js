@@ -1,7 +1,10 @@
-const sequelize = require('./sequelize');
+const DB = require('./DB');
+const SEQ = require('sequelize');
+const Op = SEQ.Op;
 
-sequelize.db.sync()
-	.then(() => sequelize.models.work.create({
+
+DB.db.sync()
+	.then(() => DB.models.work.create({
 		title: 'gg.STRING',
 		des: 'gg.STRING',
 		tag: '包吃住???五险一金',
@@ -19,13 +22,46 @@ sequelize.db.sync()
 
 const work = {
 	get_work(options = {}) {
-	    let filter= JSON.parse(options.filter);
-		sequelize.models.work.findAll({
+	    let filter= JSON.parse(options.filter ? options.filter : {});
+		console.log(222222222222222);
+		DB.models.work.findAll({
             offset: options.data.size ? (Number(options.data.page) - 1) * options.data.size : 0, // 默认不跳过（显示第一页数据）
             limit: options.data.size ? options.data.size : 100, // 分页大小  默认100
-            where: filter, // 查询条件
+			// 查询条件
+            // where: {filter},
+			// where: {
+            // 	title: {
+			// 		[Op.substring]: options.like
+			// 	},
+			// 	des: {
+			// 		[Op.substring]: options.like
+			// 	}
+			// },
+			// where: {
+			// 	[Op.or]: [
+			// 		{
+			// 			title: {
+			// 				[Op.like]: 'Boat%'
+			// 			}
+			// 		},
+			// 		{
+			// 			description: {
+			// 				[Op.like]: '%boat%'
+			// 			}
+			// 		}
+			// 	]
+			// },
+			// where: {
+			// 	title: {
+			// 		[Op.like]: '%放%'
+			// 	}
+			// },
+			where: {
+				title: 'hhh'
+			},
             raw: true
 		}).then(res => {
+			console.log(222222222222222);
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
@@ -36,7 +72,7 @@ const work = {
 		});
 	},
 	add_work(options = {}) {
-		sequelize.models.work.create(options.data).then(res => {
+		DB.models.work.create(options.data).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}
@@ -50,7 +86,7 @@ const work = {
 	delete_work(options = {}) {
 		console.log('请求参数');
 		console.log(options.data.where);
-		sequelize.models.work.destroy(
+		DB.models.work.destroy(
 			{
 				where: options.data.where
 			}
@@ -67,7 +103,7 @@ const work = {
 	},
 	put_work(options = {}) {
 		let param = options.data.param;
-		sequelize.models.work.update(
+		DB.models.work.update(
 			// param,
 			// where: options.data.where,
 			param,
