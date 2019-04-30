@@ -9,11 +9,15 @@ import store from './state/index.js'
 
 
 Vue.config.productionTip = false
+// import store from './store'  
+// Vue.prototype.$store = store  
 
 App.mpType = 'app'
 
+Vue.prototype.$store = store
+
 const app = new Vue({
     ...App,
-	store: store,
+	store
 })
 app.$mount()

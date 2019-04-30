@@ -1,8 +1,8 @@
-const sequelize = require('./sequelize');
+const DB = require('./DB');
 
 const userApi = {
 	register(options = {}) {
-		sequelize.models.user.findAll().then(res => {
+		DB.models.user.findAll().then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res.data.data)
 			}
@@ -15,7 +15,7 @@ const userApi = {
 	login(options = {}) {
 		console.log(222);
 		console.log(options.data);
-		sequelize.models.user.findAll({
+		DB.models.user.findAll({
 			where: options.data
 		}).then(res => {
 			if (options.success && typeof options.success === 'function') {
@@ -31,9 +31,7 @@ const userApi = {
 		});
 	},
 	getUserInfo(options = {}) {
-		sequelize.models.user.findAll({
-			where: options.data
-		}).then(res => {
+		DB.models.User.findAll({ include: [ DB.models.Collect,DB.models.Comment,DB.models.Apply ] }).then(res => {
 			if (options.success && typeof options.success === 'function') {
 				options.success(res)
 			}

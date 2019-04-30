@@ -9,25 +9,27 @@
             }
         },
         {
-            "path" : "pages/login/login",
+            "path" : "pages/Simple-login/pages/ucenter/login",
             "style" : {
                 "navigationBarTitleText" : "登录"
             }
         },
         {
-            "path" : "pages/register/register",
+            //  "path" : "pages/register/register",
+            "path" : "pages/Simple-login/pages/ucenter/register",
             "style" : {
                 "navigationBarTitleText" : "注册"
             }
         },
         {
-            "path" : "pages/center/center",
+            "path" : "pages/HM-PersonalCenter/pages/HM-PersonalCenter/HM-PersonalCenter",
             "style" : {
                 "navigationBarTitleText" : "个人中心"
             }
         },
         {
-            "path" : "pages/list/list",
+//            "path" : "pages/list/list",
+            "path" : "pages/list5/pages/list2detail-list/list2detail-list",
             "style" : {
                 "navigationBarTitleText" : "兼职列表",
                 "enablePullDownRefresh" : true
@@ -46,13 +48,42 @@
             }
         },
         {
-            "path" : "pages/detail/detail",
+//            "path" : "pages/detail/detail",
+            "path" : "pages/list5/pages/list2detail-detail/list2detail-detail",
             "style" : {
                 "navigationBarTitleText" : "兼职详情"
             }
         },
+// 		{
+// 		//            "path" : "pages/detail/detail",
+// 			"path" : "pages/list/list",
+// 			"style" : {
+// 				"navigationBarTitleText" : "兼职详情"
+// 			}
+// 		},
+		{
+		//            "path" : "pages/detail/detail",
+			"path" : "pages/detail/detail",
+			"style" : {
+				"navigationBarTitleText" : "兼职详情"
+			}
+		},
+        {
+            "path" : "pages/uni-feedback/pages/uni-feedback/uni-feedback",
+            "style" : {
+                "navigationBarTitleText" : "评论兼职"
+            }
+        },
         {
             "path" : "pages/forget/forget/forget",
+            "style" : {}
+        },
+        {
+            "path" : "pages/center/center",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/comments/comments",
             "style" : {}
         }
     ],
@@ -88,7 +119,7 @@
                 "text" : "分类"
             },
             {
-                "pagePath" : "pages/center/center",
+                "pagePath" : "pages/HM-PersonalCenter/pages/HM-PersonalCenter/HM-PersonalCenter",
                 "iconPath" : "static/center-0.png",
                 "selectedIconPath" : "static/center-1.png",
                 "text" : "我的"
