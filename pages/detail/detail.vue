@@ -217,7 +217,7 @@
 </script>
 
 <style>
-	.duty,.text-box,{
+	.duty,.text-box{
 		padding: 0 20upx;
 	}
 	.banner {
