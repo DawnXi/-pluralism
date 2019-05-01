@@ -56,6 +56,14 @@
             "path" : "pages/comments/comments",
             "style" : {}
         }
+        ,{
+            "path" : "pages/chart-list/chart-list",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/chart/chart",
+            "style" : {}
+        }
     ],
     "globalStyle" : {
         "navigationBarTextStyle" : "black",
@@ -83,10 +91,11 @@
                 "text" : "推荐"
             },
             {
-                "pagePath" : "pages/category/category",
+                // "pagePath" : "pages/category/category",
+                "pagePath" : "pages/chart-list/chart-list",
                 "iconPath" : "static/tag-0.png",
                 "selectedIconPath" : "static/tag-1.png",
-                "text" : "分类"
+                "text" : "消息"
             },
             {
                 "pagePath" : "pages/center/center",
