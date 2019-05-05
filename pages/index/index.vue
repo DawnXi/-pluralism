@@ -8,17 +8,16 @@
 			<image class="logo" src="/static/logo.png"></image>
 			<view class="search-input">
 				<input @focus='onFocus' confirm-type='search' v-model="keyword" style="" class="uni-input" type="text" name="keyword" placeholder="搜索公司,职位等" />
-				<text @click="searchGoods" class="icon search" style="">&#xe66e;</text>
+				<text @tap="toSearch(keyword)" class="icon search" style="">&#xe66e;</text>
 			</view>
 		</view>
 		<!-- 搜索面板 -->
 		<searchPanel v-if='showPanel'></searchPanel>
-		
 		<!-- 兼职列表 -->
-		<List></List>
+		<List style="z-index: 9999;"></List>
 		
 		 <!-- 自定义的弹出框 -->
-		<button type="primary" size="mini" @click="handleShow(1)">查看</button>
+		<button type="primary" size="mini" @tap="handleShow(1)">查看</button>
 		<xyDialog
 				title="标题"
 				content="操作成功,你懂得~"
@@ -101,6 +100,11 @@
 			toDetail (id) {
 				uni.navigateTo({
 					url: `../../pages/detail/detail?id=${id}`
+				})
+			},
+			toSearch(keyword) {
+				uni.navigateTo({
+					url: `../../pages/search-result/search-result?keyword=${keyword}`
 				})
 			},
 			test () {
@@ -257,8 +261,7 @@
 	}
 	.content {
 		text-align: center;
-		height: 400upx;
-
+		padding-bottom: 80px;
 	}
     .logo{
         height: 70upx;

@@ -60,6 +60,10 @@
             "path" : "pages/chart/chart",
             "style" : {}
         }
+        ,{
+            "path" : "pages/search-result/search-result",
+            "style" : {}
+        }
     ],
     "globalStyle" : {
         "navigationBarTextStyle" : "black",

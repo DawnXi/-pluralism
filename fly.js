@@ -1,14 +1,6 @@
 let Fly=require("flyio/dist/npm/wx");
 import env from 'env.js'
 let fly=new Fly;
-let server = "https://uniapp.dcloud.io/update";
-let req = {"appid":"123","version":"123"};
-fly.request(server,req,{
-    method:"get",
-    timeout:5000 //超时设置为5s
-})
-    .then(d=>{ console.log("request result:",d)})
-    .catch((e) => console.log("error", e));
 
 
 //添加请求拦截器

@@ -23,11 +23,14 @@
 				</view>
 			</view>
 		</view>
+		<!--上传信息组件-->
+		<Upload></Upload>
 	</view>
 </template>
 
 <script>
 	import uniBadge from "../components/uni-badge.vue";
+	import Upload from "@/components/upload.vue";
 	export default {
 		data() {
 			return {
@@ -35,7 +38,8 @@
 			};
 		},
 		components:{
-			uniBadge
+			uniBadge,
+			Upload
 		}
 	}
 </script>

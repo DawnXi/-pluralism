@@ -6,7 +6,7 @@
 			<view class="item">最新</view>
 		</view>
 		<view class="list">
-			<view class="list-item">
+			<view class="list-item" v-for="n in 5" :key="n" @tap="toDetail(n)">
 				<view class="logo"></view>
 				<view class="company">
 					<view class="name">爱奇艺</view>
@@ -28,73 +28,6 @@
 					</view>
 				</view>
 			</view>
-			<view class="list-item">
-				<view class="logo"></view>
-				<view class="company">
-					<view class="name">爱奇艺</view>
-					<view class="info">上市公司 | 2000人以上 | 移动互联网</view>
-				</view>
-				<view class="work">
-					<view class="left">
-						<view class="name">高级视觉设计师</view>
-						<view class="address">北京 | 海淀</view>
-						<view class="welfare">
-							<text class="item">只要女生</text>
-							<text class="item">周末兼职</text>
-							<text class="item">日结简直</text>
-						</view>
-					</view>
-					<view class="right">
-						<view class="salary">120/天</view>
-						<view class="apply">立即报名</view>
-					</view>
-				</view>
-			</view>
-			<view class="list-item">
-				<view class="logo">去兼职</view>
-				<view class="company">
-					<view class="name">爱奇艺</view>
-					<view class="info">上市公司 | 2000人以上 | 移动互联网</view>
-				</view>
-				<view class="work">
-					<view class="left">
-						<view class="name">高级视觉设计师</view>
-						<view class="address">北京 | 海淀</view>
-						<view class="welfare">
-							<text class="item">只要女生</text>
-							<text class="item">周末兼职</text>
-							<text class="item">日结简直</text>
-						</view>
-					</view>
-					<view class="right">
-						<view class="salary">120/天</view>
-						<view class="apply">立即报名</view>
-					</view>
-				</view>
-			</view>
-			<view class="list-item">
-				<view class="logo"></view>
-				<view class="company">
-					<view class="name">爱奇艺</view>
-					<view class="info">上市公司 | 2000人以上 | 移动互联网</view>
-				</view>
-				<view class="work">
-					<view class="left">
-						<view class="name">高级视觉设计师</view>
-						<view class="address">北京 | 海淀</view>
-						<view class="welfare">
-							<text class="item">只要女生</text>
-							<text class="item">周末兼职</text>
-							<text class="item">日结简直</text>
-						</view>
-					</view>
-					<view class="right">
-						<view class="salary">120/天</view>
-						<view class="apply">立即报名</view>
-					</view>
-				</view>
-			</view>
-			
 		</view>
 	</view>
 </template>
@@ -105,6 +38,13 @@
 			return {
 				
 			};
+		},
+		methods: {
+			toDetail (id) {
+				uni.navigateTo({
+					url: `../../pages/detail/detail?id=${id}`
+				})
+			}
 		}
 	}
 </script>
