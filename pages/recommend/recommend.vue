@@ -181,19 +181,11 @@
 	.address{
 		color: #666;
 	}
-	.logo{
-		width: 50upx;
-		height: 50upx;
-		background: #007AFF;
-		position: absolute;
-		top: -20px;
-		left: 20px;
-	}
-	uni-view.company {
+	.company {
 		margin-left: 150upx;
 	}
 
-	uni-view.logo {
+	.logo {
 		width: 140upx;
 		height: 140upx;
 		background: #007AFF;
@@ -203,7 +195,7 @@
 		border-radius: 10upx;
 	}
 
-	uni-view.list-item {
+	.list-item {
 		padding-top: 0px;
 		margin-top: 50upx;
 		background: #fff;

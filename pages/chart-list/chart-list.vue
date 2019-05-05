@@ -54,9 +54,9 @@
 	background: #fff;
 	min-height: 100%;
 }
-uni-view.header {
-display: flex;
-justify-content: space-around;
+.header {
+	display: flex;
+	justify-content: space-around;
 }
 .user-info .name {
     font-weight: 700;
@@ -67,7 +67,7 @@ justify-content: space-around;
     font-size: 12px;
     color: #999;
 }
-uni-view.left .img {
+.left .img {
     width: 50px;
     height: 50px;
     border-radius: 50px;
@@ -75,14 +75,14 @@ uni-view.left .img {
     margin-right: 10px;
 }
 
-uni-view.right {
+.right {
 	text-align: right;
 	position: absolute;
 	top: 0;
 	right: 20upx;
 }
 
-uni-view.item {
+.item {
     overflow: hidden;
     border-bottom: #ddd solid 1px;
     padding: 10px 40upx;
@@ -94,11 +94,11 @@ uni-view.item {
 	margin-left: 40upx;
 }
 
-uni-view.comment {
+.comment {
     padding-left: 60px;
 }
 
-uni-view.list {
+.list {
     border-top: #ddd solid 1px;
 	padding: 0 20upx;
 }

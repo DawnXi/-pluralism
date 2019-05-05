@@ -49,10 +49,6 @@
             "style" : {}
         },
         {
-            "path" : "pages/center/center",
-            "style" : {}
-        }
-        ,{
             "path" : "pages/comments/comments",
             "style" : {}
         }
