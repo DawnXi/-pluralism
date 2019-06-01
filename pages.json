@@ -9,32 +9,29 @@
             }
         },
         {
-            "path" : "pages/Simple-login/pages/ucenter/login",
+            "path" : "pages/login/login",
             "style" : {
                 "navigationBarTitleText" : "登录"
             }
         },
         {
-            //  "path" : "pages/register/register",
-            "path" : "pages/Simple-login/pages/ucenter/register",
+            "path" : "pages/register/register",
             "style" : {
                 "navigationBarTitleText" : "注册"
             }
         },
         {
-            "path" : "pages/HM-PersonalCenter/pages/HM-PersonalCenter/HM-PersonalCenter",
+            "path" : "pages/center/center",
             "style" : {
                 "navigationBarTitleText" : "个人中心"
             }
         },
-        {
-//            "path" : "pages/list/list",
-            "path" : "pages/list5/pages/list2detail-list/list2detail-list",
-            "style" : {
-                "navigationBarTitleText" : "兼职列表",
-                "enablePullDownRefresh" : true
-            }
-        },
+		{
+		    "path" : "pages/resume/resume",
+		    "style" : {
+		        "navigationBarTitleText" : "编辑简历"
+		    }
+		},
         {
             "path" : "pages/recommend/recommend",
             "style" : {
@@ -47,43 +44,30 @@
                 "navigationBarTitleText" : "分类"
             }
         },
-        {
-//            "path" : "pages/detail/detail",
-            "path" : "pages/list5/pages/list2detail-detail/list2detail-detail",
-            "style" : {
-                "navigationBarTitleText" : "兼职详情"
-            }
-        },
-// 		{
-// 		//            "path" : "pages/detail/detail",
-// 			"path" : "pages/list/list",
-// 			"style" : {
-// 				"navigationBarTitleText" : "兼职详情"
-// 			}
-// 		},
 		{
-		//            "path" : "pages/detail/detail",
 			"path" : "pages/detail/detail",
 			"style" : {
 				"navigationBarTitleText" : "兼职详情"
 			}
 		},
         {
-            "path" : "pages/uni-feedback/pages/uni-feedback/uni-feedback",
-            "style" : {
-                "navigationBarTitleText" : "评论兼职"
-            }
-        },
-        {
-            "path" : "pages/forget/forget/forget",
+            "path" : "pages/forget/forget",
             "style" : {}
         },
         {
-            "path" : "pages/center/center",
+            "path" : "pages/comments/comments",
             "style" : {}
         }
         ,{
-            "path" : "pages/comments/comments",
+            "path" : "pages/chart-list/chart-list",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/chart/chart",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/search-result/search-result",
             "style" : {}
         }
     ],
@@ -113,13 +97,14 @@
                 "text" : "推荐"
             },
             {
-                "pagePath" : "pages/category/category",
+                // "pagePath" : "pages/category/category",
+                "pagePath" : "pages/chart-list/chart-list",
                 "iconPath" : "static/tag-0.png",
                 "selectedIconPath" : "static/tag-1.png",
-                "text" : "分类"
+                "text" : "消息"
             },
             {
-                "pagePath" : "pages/HM-PersonalCenter/pages/HM-PersonalCenter/HM-PersonalCenter",
+                "pagePath" : "pages/center/center",
                 "iconPath" : "static/center-0.png",
                 "selectedIconPath" : "static/center-1.png",
                 "text" : "我的"

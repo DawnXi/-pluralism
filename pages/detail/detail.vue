@@ -29,8 +29,6 @@
 		</view>
 		<!-- 地图区域 -->
 		<view class="title">公司地址</view>
-		<div id="allmap"></div>
-		
 		<div id="container"></div>
 		<view><a href="bdapp://map/geocoder?src=andr.baidu.openAPIdemo&address=北京市海淀区上地信息路9号奎科科技大厦">导航百度地图导航</a></view>
 		<!-- <view><a href="http://uri.amap.com/marker?position=116.473195,39.993253&name=首开广场&src=mypage&coordinate=gaode&callnative=1">高德地图导航</a></view> -->
@@ -94,102 +92,54 @@
 	
 	//#ifdef H5
 	// 高德地图
-	var url = 'https://webapi.amap.com/maps?v=1.4.14&key=e0f2dc4c622ac1679e93f21c54000820&callback=onLoad';
-	var jsapi = document.createElement('script');
+	let url = 'https://webapi.amap.com/maps?v=1.4.14&key=e0f2dc4c622ac1679e93f21c54000820&callback=onLoad';
+	let jsapi = document.createElement('script');
 	jsapi.charset = 'utf-8';
 	jsapi.src = url;
 	document.head.appendChild(jsapi);
 	window.onLoad  = function(){
 		// 初始化地图
 		var geolocation,mapObj;
-		// mapObj = new AMap.Map('container',{
-		// 	zoom:15,
-		// 	center:[104.065,30.658]
-		// });
+		mapObj = new AMap.Map('container',{
+			zoom:15,
+			center:[104.065,30.658]
+		});
 		
 		// 获取定位
-		// mapObj.plugin('AMap.Geolocation', function () {
-		// 	geolocation = new AMap.Geolocation({
-		// 		enableHighAccuracy: true,//是否使用高精度定位，默认:true
-		// 		timeout: 800,          //超过10秒后停止定位，默认：无穷大
-		// 		maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-		// 		convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-		// 		showButton: true,        //显示定位按钮，默认：true
-		// 		buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
-		// 		buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-		// 		showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
-		// 		showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
-		// 		panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
-		// 		zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-		// 	});
-		// 	mapObj.addControl(geolocation);
-		// 	geolocation.getCurrentPosition();
-		// 	AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
-		// 	AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
-		// });
-		
-		
-		// 添加自定义点
-		// var marker1 = new AMap.Marker({
-		// 	position: new AMap.LngLat(104.066744,30.653186),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-		// 	title: '北京'
-		// });
-		// var marker2 = new AMap.Marker({
-		// 	position: new AMap.LngLat(104.051747,30.653111),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-		// 	title: '北京'
-		// });
-		// mapObj.add(marker1);
-		// mapObj.add(marker2);
-	}
-	
-	// 百度地图
-	var url2 = 'http://api.map.baidu.com/api?v=2.0&ak=TGfrGSYYe52MqlgGobheG4cGywWRvsFk&callback=onBMapCallback';
-	var jsapi2 = document.createElement('script');
-	jsapi2.charset = 'utf-8';
-	jsapi2.src = url2;
-	document.head.appendChild(jsapi2);
-	window.onBMapCallback = function() {
-		// var map2 = new BMap.Map("allmap");          // 创建地图实例  
-		// var point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
-		// map2.centerAndZoom(point, 10);                 // 初始化地图，设置中心点坐标和地图级别  
-		
-		// 初始化地图
-		var map2 = new BMap.Map("allmap");      
-		var point = new BMap.Point(116.331398,39.897445);
-		map2.centerAndZoom(point);
-
-		var geolocation = new BMap.Geolocation();
-		geolocation.getCurrentPosition(function(r){
-			if(this.getStatus() == BMAP_STATUS_SUCCESS){
-				var mk = new BMap.Marker(r.point);
-				map2.addOverlay(mk);
-				map2.panTo(r.point);
-				alert('您的位置：'+r.point.lng+','+r.point.lat);
-			}
-			else {
-				alert('failed'+this.getStatus());
-			}        
+		mapObj.plugin('AMap.Geolocation', function () {
+			geolocation = new AMap.Geolocation({
+				enableHighAccuracy: true,//是否使用高精度定位，默认:true
+				timeout: 800,          //超过10秒后停止定位，默认：无穷大
+				maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+				convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+				showButton: true,        //显示定位按钮，默认：true
+				buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+				buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+				showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+				showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+				panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+				zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+			});
+			mapObj.addControl(geolocation);
+			geolocation.getCurrentPosition();
+			AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+			AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
 		});
 		
 		
-		// 获取定位点
-		map2.centerAndZoom(new BMap.Point(116.404, 39.915));      
-		// 创建地址解析器实例     
-		var myGeo = new BMap.Geocoder();      
-		// 将地址解析结果显示在地图上，并调整地图视野    
-		myGeo.getPoint("四川省成都市科园二路10号", function(point){      
-			if (point) {      
-				map2.centerAndZoom(point, 16);      
-				map2.addOverlay(new BMap.Marker(point));      
-			}      
-		 }, 
-		"成都市");
-		
-        // 添加自定义点				
-		// var point = new BMap.Point(104.051747,30.653111);    
-		// map2.centerAndZoom(point);    
-		// var marker = new BMap.Marker(point);        // 创建标注    
-		// map2.addOverlay(marker);    
+		// 添加自定义点
+		var marker1 = new AMap.Marker({
+			position: new AMap.LngLat(104.066744,30.653186),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+			title: '北京'
+		});
+		var marker2 = new AMap.Marker({
+			position: new AMap.LngLat(104.051747,30.653111),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+			title: '北京'
+		});
+		mapObj.add(marker1);
+		mapObj.add(marker2);
+		// 添加事件监听, 使地图自适应显示到合适的范围
+		let newCenter = mapObj.setFitView();
 	}
 	//#endif
 	
@@ -217,7 +167,7 @@
 </script>
 
 <style>
-	.duty,.text-box,{
+	.duty,.text-box{
 		padding: 0 20upx;
 	}
 	.banner {
@@ -333,24 +283,5 @@
 	#container {
 		width:100%;
 		height: 500px; 
-	}  
-	
-	#allmap{width:100%;height:500px;}
-	
-	
-	.btn-area{
-	  margin-top: 60rpx;
-	  box-sizing: border-box;
-	  width: 100%;
-	  padding: 0 30rpx;
-	}
-	
-	.page-section-gap{
-	  box-sizing: border-box;
-	  padding: 0 30rpx;
-	}
-
-	.page-body-button {
-	  margin-bottom: 30rpx;
 	}
 	</style>
