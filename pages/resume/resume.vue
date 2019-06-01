@@ -55,13 +55,14 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	img.avatar {
 		width: 60px;
+		height: 60px;
 		border-radius: 60px;
 	}
 
-	uni-view.header {
+	.header {
 		text-align: center;
 		color: #666;
 	}
@@ -89,16 +90,16 @@
 		min-height: 720px;
 	}
 
-	uni-view.form .item {
+	.form .item {
 		position: relative;
 	}
 
-	uni-input.uni-input {
+	.uni-input {
 		margin: 10px;
 		border-radius: 2px;
 	}
 
-	uni-view.radio-group {
+	.radio-group {
 		padding-left: 10px;
 	}
 
@@ -109,7 +110,7 @@
 		margin: 0 auto;
 	}
 
-	uni-view.uni-textarea {
+	.uni-textarea {
 		width: 95%;
 		background: #FFF;
 		display: block;

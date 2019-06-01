@@ -16,6 +16,22 @@
 		<!-- 兼职列表 -->
 		<List style="z-index: 9999;"></List>
 		
+		
+		<view class="work-list">
+			<view class="item1"  v-for="n in 5" :key="n" @tap="toDetail(n)">
+				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
+				<view class="info">
+					<view class="name">高薪中高端电话客服</view>
+					<view class="address"><i></i><text class="text">朝阳朝外，朝阳门，东大桥（据我2.0km）</text></view>
+					<view class="time"><i></i><text class="text">09月15日-12月15日，10：00-21：00</text></view>
+				</view>
+				<view class="price">180/天</view>
+				<view class="settlement">周结</view>
+				<view class="update">5分钟前</view>
+			</view>
+			<view @tap="test">测试</view>
+		</view>
+		
 		 <!-- 自定义的弹出框 -->
 		<button type="primary" size="mini" @tap="handleShow(1)">查看</button>
 		<xyDialog

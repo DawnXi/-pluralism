@@ -26,6 +26,12 @@
                 "navigationBarTitleText" : "个人中心"
             }
         },
+		{
+		    "path" : "pages/resume/resume",
+		    "style" : {
+		        "navigationBarTitleText" : "编辑简历"
+		    }
+		},
         {
             "path" : "pages/recommend/recommend",
             "style" : {

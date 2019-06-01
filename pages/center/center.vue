@@ -90,14 +90,14 @@
 		<!--上传信息组件-->
 		<Upload></Upload>
 
-        <Test></Test>
+        <!-- <Test></Test> -->
 	</view>
 </template>
 
 <script>
 	import uniBadge from "../components/uni-badge.vue";
 	import Upload from "@/components/upload.vue";
-	import Test from "@/components/test.vue";
+	// import Test from "@/components/test.vue";
 	export default {
 		data() {
 			return {
@@ -107,7 +107,7 @@
 		components:{
 			uniBadge,
 			Upload,
-            Test
+            // Test
 		},
 		methods: {
 			editResume (userId) {
@@ -126,13 +126,14 @@
     }
     img.avatar {
         width: 60px;
+		height: 60px;
         border-radius: 60px;
         float: left;
         border: solid 3px #fff;
         margin-right: 15px;
     }
 
-    uni-view.header {
+    .header {
         background: #36e7e1;
         color: #fff;
         font-size: 16px;
@@ -141,29 +142,29 @@
         padding-bottom: 10px;
     }
 
-    uni-view.edit {
+    .edit {
         float: right;
         margin-top: -24px;
         margin-right: 10px;
     }
 
-    uni-view.other {
+    .other {
         width: 100%;
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
     }
 
-    uni-view.des {
+    .des {
         padding-top: 10px;
     }
 
-    uni-view.other .button {
+    .other .button {
         border: #fff solid 1px;
         padding: 0px 3px;
         margin-right: 10px;
     }
-    uni-view.my-data {
+    .my-data {
         background: #fff;
     }
 
@@ -176,21 +177,22 @@
         padding-left: 30px;
     }
 
-    uni-view.item {}
+    .item {}
 
-    uni-view.my-data .item {
+    .my-data .item {
         width: 100px;
         text-align: center;
         padding-bottom: 10px;
     }
 
-    uni-view.my-data i {
+    .my-data i {
         font-size: 35px;
         color: #36e7e1;
     }
 
     .uni-list i.iconfont {
         position: absolute;
+		top: 6px;
         left: 6px;
     }
 
