@@ -11,19 +11,21 @@ timeout:5000 //超时设置为5s
 .catch((e) => console.log("error", e));  
 
 
+
 //添加请求拦截器
 fly.interceptors.request.use((request)=>{
     //给所有请求添加自定义header
     request.headers['X-Tag']="flyio";
     request.headers['access-token']='myHeader';
-	request.withCredentials = true;
-	request.baseURL = env.baseUrl;
+    request.withCredentials = true;
+    request.baseURL = env.baseUrl;
       //打印出请求体
       console.log(request.body)
       //终止请求
       //var err=new Error("xxx")
       //err.request=request
       //return Promise.reject(new Error(""))
+
 
     //可以显式返回request, 也可以不返回，没有返回值时拦截器中默认返回request
     return request;

@@ -1,6 +1,6 @@
 <template>
 	<view class="work-list">
-		<view class="item1"  v-for="n in 5" :key="n" @click="toDetail(n)">
+		<view class="item1"  v-for="n in 5" :key="n" @tap="toDetail(n)">
 			<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
 			<view class="info">
 				<view class="name">高薪中高端电话客服</view>
@@ -11,6 +11,7 @@
 			<view class="settlement">周结</view>
 			<view class="update">5分钟前</view>
 		</view>
+		<view @tap="test">测试</view>
 	</view>
 </template>
 
@@ -18,7 +19,7 @@
 	export default {
 		data() {
 			return {
-				
+
 			};
 		},
 		methods: {
@@ -26,6 +27,9 @@
 				uni.navigateTo({
 					url: `../../pages/detail/detail?id=${id}`
 				})
+			},
+			test() {
+				console.log('这个是测试');
 			}
 		},
 	}

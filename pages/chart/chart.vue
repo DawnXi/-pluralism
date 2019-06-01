@@ -139,11 +139,18 @@
 }
 .other{
 	position: relative;
+	margin-left: 90upx;
 }
-.add{
+.icon-xiaolian {
 	position: absolute;
-	right: 5upx;
+	right: 45upx;
+	top: 0px;
+}
+.icon-hao{
+	position: absolute;
+	right: -5upx;
 	top: 0upx;
+	margin-right: 0;
 }
 .bottom-menu i {
    line-height: 40px;
@@ -151,9 +158,6 @@
 .iconfont{
 	font-size: 40upx;
     margin-right: 10upx;
-}
-.icon-hao{
-	margin-right: 0;
 }
 
 </style>

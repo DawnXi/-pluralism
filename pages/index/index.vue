@@ -8,17 +8,32 @@
 			<image class="logo" src="/static/logo.png"></image>
 			<view class="search-input">
 				<input @focus='onFocus' confirm-type='search' v-model="keyword" style="" class="uni-input" type="text" name="keyword" placeholder="搜索公司,职位等" />
-				<text @click="searchGoods" class="icon search" style="">&#xe66e;</text>
+				<text @tap="toSearch(keyword)" class="icon search" style="">&#xe66e;</text>
 			</view>
 		</view>
 		<!-- 搜索面板 -->
 		<searchPanel v-if='showPanel'></searchPanel>
-		
 		<!-- 兼职列表 -->
-		<List></List>
+		<List style="z-index: 9999;"></List>
+		
+		
+		<view class="work-list">
+			<view class="item1"  v-for="n in 5" :key="n" @tap="toDetail(n)">
+				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
+				<view class="info">
+					<view class="name">高薪中高端电话客服</view>
+					<view class="address"><i></i><text class="text">朝阳朝外，朝阳门，东大桥（据我2.0km）</text></view>
+					<view class="time"><i></i><text class="text">09月15日-12月15日，10：00-21：00</text></view>
+				</view>
+				<view class="price">180/天</view>
+				<view class="settlement">周结</view>
+				<view class="update">5分钟前</view>
+			</view>
+			<view @tap="test">测试</view>
+		</view>
 		
 		 <!-- 自定义的弹出框 -->
-		<button type="primary" size="mini" @click="handleShow(1)">查看</button>
+		<button type="primary" size="mini" @tap="handleShow(1)">查看</button>
 		<xyDialog
 				title="标题"
 				content="操作成功,你懂得~"
@@ -26,6 +41,8 @@
 				@cancelButton="clickCancel(1)"
 				@confirmButton="clickConfirm(1)"
 		></xyDialog>
+
+		<view @tap="goChart">测试聊天会话</view>
 	</view>
 </template>
 
@@ -101,6 +118,11 @@
 			toDetail (id) {
 				uni.navigateTo({
 					url: `../../pages/detail/detail?id=${id}`
+				})
+			},
+			toSearch(keyword) {
+				uni.navigateTo({
+					url: `../../pages/search-result/search-result?keyword=${keyword}`
 				})
 			},
 			test () {
@@ -224,6 +246,11 @@
 			},
 			handleActionShow() {
 				this.$refs.xyDialog.show()
+			},
+			goChart() {
+				uni.navigateTo({
+					url: '../../pages/chart-list/chart-list'
+				})
 			}
 		},
 		onLoad() {
@@ -257,8 +284,7 @@
 	}
 	.content {
 		text-align: center;
-		height: 400upx;
-
+		padding-bottom: 80px;
 	}
     .logo{
         height: 70upx;

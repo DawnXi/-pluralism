@@ -1,6 +1,6 @@
 {
     "pages" : [
-        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
             "path" : "pages/index/index",
             "style" : {
@@ -26,6 +26,12 @@
                 "navigationBarTitleText" : "个人中心"
             }
         },
+		{
+		    "path" : "pages/resume/resume",
+		    "style" : {
+		        "navigationBarTitleText" : "编辑简历"
+		    }
+		},
         {
             "path" : "pages/recommend/recommend",
             "style" : {
@@ -49,11 +55,19 @@
             "style" : {}
         },
         {
-            "path" : "pages/center/center",
+            "path" : "pages/comments/comments",
             "style" : {}
         }
         ,{
-            "path" : "pages/comments/comments",
+            "path" : "pages/chart-list/chart-list",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/chart/chart",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/search-result/search-result",
             "style" : {}
         }
     ],
@@ -83,10 +97,11 @@
                 "text" : "推荐"
             },
             {
-                "pagePath" : "pages/category/category",
+                // "pagePath" : "pages/category/category",
+                "pagePath" : "pages/chart-list/chart-list",
                 "iconPath" : "static/tag-0.png",
                 "selectedIconPath" : "static/tag-1.png",
-                "text" : "分类"
+                "text" : "消息"
             },
             {
                 "pagePath" : "pages/center/center",
