@@ -104,6 +104,8 @@
 				@cancelButton="clickCancel(1)"
 				@confirmButton="clickConfirm(1)"
 		></xyDialog>
+
+		<view @tap="goChart">测试聊天会话</view>
 	</view>
 </template>
 
@@ -300,6 +302,11 @@
 			},
 			handleActionShow() {
 				this.$refs.xyDialog.show()
+			},
+			goChart() {
+				uni.navigateTo({
+					url: '../../pages/chart-list/chart-list'
+				})
 			}
 		},
 		onLoad() {

@@ -1,7 +1,7 @@
 <template>
 	<view class="chart-list">
 		<view class="list-title">最近会话</view>
-		<view class="item">
+		<view class="item" v-for="n in 10" :key="n">
 			<view class="left">
 				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
 				<view class="user-info">
