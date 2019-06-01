@@ -1,6 +1,15 @@
 let Fly=require("flyio/dist/npm/wx");
 import env from 'env.js'
 let fly=new Fly;
+let server = "https://uniapp.dcloud.io/update";  
+let req = {"appid":"123","version":"123"};  
+fly.request(server,req,{  
+method:"get",  
+timeout:5000 //超时设置为5s  
+})  
+.then(d=>{ console.log("request result:",d)})  
+.catch((e) => console.log("error", e));  
+
 
 
 //添加请求拦截器
@@ -10,12 +19,13 @@ fly.interceptors.request.use((request)=>{
     request.headers['access-token']='myHeader';
     request.withCredentials = true;
     request.baseURL = env.baseUrl;
-    //打印出请求体
-    console.log(request.body)
-    //终止请求
-    //var err=new Error("xxx")
-    //err.request=request
-    //return Promise.reject(new Error(""))
+      //打印出请求体
+      console.log(request.body)
+      //终止请求
+      //var err=new Error("xxx")
+      //err.request=request
+      //return Promise.reject(new Error(""))
+
 
     //可以显式返回request, 也可以不返回，没有返回值时拦截器中默认返回request
     return request;
