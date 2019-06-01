@@ -1,20 +1,6 @@
 <template>
 	<view class="content">
-       <!-- <image class="logo" src="../../static/logo.png"></image>
-		<view>
-            <text class="title">{{title}}</text>
-        </view> -->
 		<text>这个是首页</text>
-		<!-- <uniSwiperDot :info="info" :current="current" field="content" :mode="mode">
-			<swiper class="swiper-box" @change="change">
-				<swiper-item v-for="(item ,index) in info" :key="index">
-					<view class="swiper-item">
-						<img :src="'/static/images/banner'+ (index+1) +'.png'" alt="">
-						{{item.content}}
-					</view>
-				</swiper-item>
-			</swiper>
-		</uniSwiperDot> -->
 		<view class="banner">
 			<image class="banner-img" src="../../static/banner.png" mode="widthFix"></image>
 		</view>
@@ -22,32 +8,17 @@
 			<image class="logo" src="/static/logo.png"></image>
 			<view class="search-input">
 				<input @focus='onFocus' confirm-type='search' v-model="keyword" style="" class="uni-input" type="text" name="keyword" placeholder="搜索公司,职位等" />
-				<text @click="searchGoods" class="icon search" style="">&#xe66e;</text>
+				<text @tap="toSearch(keyword)" class="icon search" style="">&#xe66e;</text>
 			</view>
 		</view>
 		<!-- 搜索面板 -->
 		<searchPanel v-if='showPanel'></searchPanel>
-		
 		<!-- 兼职列表 -->
-		<view class="works-list">
-			<!-- <view class="item" v-for="n in 5" :key="n" @click="toDetail(n)">
-				<div class="left">
-					<image class="img" src="../../static/ym.png" mode="widthFix"></image>
-					<view class="state">报名中</view>
-				</div>
-				<div class="right">
-					<view class="title">天猫优惠券在家赚钱25岁以上女性宝妈优先<text class="tag">热</text><text class="tag">荐</text></view>
-					<view class="info">
-						<view class="local">成都</view>
-						<view class="salary">
-							<view class="money">200元/天</view>
-							<view class="time">长期可做</view>
-						</view>
-					</view>
-				</div>
-			</view>
-			 -->
-			<view class="item1"  v-for="n in 5" :key="n" @click="toDetail(n)">
+		<List style="z-index: 9999;"></List>
+		
+		
+		<view class="work-list">
+			<view class="item1"  v-for="n in 5" :key="n" @tap="toDetail(n)">
 				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
 				<view class="info">
 					<view class="name">高薪中高端电话客服</view>
@@ -58,45 +29,11 @@
 				<view class="settlement">周结</view>
 				<view class="update">5分钟前</view>
 			</view>
+			<view @tap="test">测试</view>
 		</view>
 		
-		<!-- <view class="uni-padding-wrap">
-			<view class="page-section swiper">
-				<view class="page-section-spacing">
-					<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="true">
-						<swiper-item>
-							<view class="swiper-item uni-bg-red">A</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item uni-bg-green">B</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item uni-bg-blue">C</view>
-						</swiper-item>
-					</swiper>
-				</view>
-			</view>
-		</view> -->
-		
-		<button size="mini" @tap="toList">跳转到列表页</button>
-		<button size="mini" @tap="toDetail(5)">跳转到详情页</button>
-		<button size="mini" @click="test">测试axios</button>
-		<button size="mini" @click="goLogin" type="primary">跳转到注册页</button>
-		<button size="mini" @click="goRegister" type="primary">跳转到登陆页</button>
-		<button size="mini" @click="testAdd" type="primary">添加分类</button>
-		<button size="mini" @click="testUpt" type="primary">修改分类</button>
-		<button size="mini" @click="testDelet" type="primary">删除分类</button>
-		<button size="mini" @click="testGet" type="primary">获取分类列表</button>
-		<ul>
-			<li v-for="(item,index) in works" :key="index">
-				{{item.tag}}
-			</li>
-		</ul>
-		
-		
-		// 自定义的弹出框
-		<!--<model :options="modelData"></model>-->
-		<button type="primary" size="mini" @click="handleShow(1)">查看</button>
+		 <!-- 自定义的弹出框 -->
+		<button type="primary" size="mini" @tap="handleShow(1)">查看</button>
 		<xyDialog
 				title="标题"
 				content="操作成功,你懂得~"
@@ -116,6 +53,7 @@
 	// import model from '../../components/model.vue'
 	import xyDialog from '@/components/xy-dialog/xy-dialog.vue'
 	import uniSwiperDot from "../../components/uni-swiper-dot/uni-swiper-dot.vue"
+	import List from "@/components/list"
 	export default {
 		data() {
 			return {
@@ -157,7 +95,8 @@
 			searchPanel,
 			// model,
 			xyDialog,
-			uniSwiperDot
+			uniSwiperDot,
+			List
 		},
 		watch: {
 		    goods: function (val) {
@@ -179,6 +118,11 @@
 			toDetail (id) {
 				uni.navigateTo({
 					url: `../../pages/detail/detail?id=${id}`
+				})
+			},
+			toSearch(keyword) {
+				uni.navigateTo({
+					url: `../../pages/search-result/search-result?keyword=${keyword}`
 				})
 			},
 			test () {
@@ -208,7 +152,7 @@
 // 				console.log('触发完成事件')
 // 				console.log(this.keyword)
 				this.TkGoodsSearch({
-					// data: this.keyword,
+					 data: this.keyword,
 					data: {
 						'app_key': 'a1c0ae7eb994b6f7',
 						'q': this.keyword
@@ -340,8 +284,7 @@
 	}
 	.content {
 		text-align: center;
-		height: 400upx;
-
+		padding-bottom: 80px;
 	}
     .logo{
         height: 70upx;
@@ -372,37 +315,6 @@
 			margin-top:60upx;
 			position:relative;
 		}
-		
-// 		.works-list .item{
-// 			display: flex;
-// 			justify-content: space-between;
-// 			margin: 0 5%;
-// 			padding-bottom: 100upx;
-// 			border-bottom: #8f8f94;
-// 			color: #D8D8D8;
-// 			.left{
-// 				width: 20%;
-// 			}
-// 			.right {
-// 				width: 75%;
-// 			}
-// 			.img{
-// 				width: 100%;
-// 				height: 200upx;
-// 			}
-// 			.title{
-// 				white-space: nowrap;
-// 				overflow: hidden;
-// 				text-overflow: ellipsis;
-// 			}
-// 			.info {
-// 				width: 65%;
-// 				display: flex;
-// 				justify-content: space-between;
-// 				align-items: flex-end;
-// 			}
-// 		}
-// 
 </style>
 
 <!-- 字体图标相关 -->
