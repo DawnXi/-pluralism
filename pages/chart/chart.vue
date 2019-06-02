@@ -41,25 +41,129 @@
 		</view>
 		<view class="bottom-menu">
 			<i class="iconfont icon-huatong"></i>
-			<input class="uni-input input" confirm-type="send" type="text" />
+			<input class="uni-input input" confirm-type="send" type="text" v-model="msg" />
 			<view class="other">
 				<i class="iconfont icon-xiaolian"></i>
 				<i class="iconfont icon-hao"></i>
 			</view>
+			<view @tap="sendMsg">测试发送消息</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	// import io from '../../common/socket'
 	export default {
 		data() {
 			return {
-				
+				userId: '',
+				msg: '',
+				// socket: null,
+				msgList: [
+					{
+						from: 'me',
+						to: 'user_id_0001',
+						msg: '这个是一条我发给user_id_0001的私聊消息'
+					},
+					{
+						from: 'user_id_0001',
+						to: 'me',
+						msg: '这个是一条user_id_0001回给我的私聊消息'
+					},
+					{
+						from: 'me',
+						to: 'user_id_0002',
+						msg: '这个是一条我发给user_id_0002的私聊消息'
+					},
+					{
+						from: 'user_id_0002',
+						to: 'me',
+						msg: '这个是一条user_id_0002回给我的私聊消息'
+					},
+					{
+						from: 'me',
+						to: 'user_id_0002',
+						msg: '这个是第二条我发给user_id_0002的私聊消息'
+					},
+					{
+						from: 'user_id_0002',
+						to: 'me',
+						msg: '这个是第二条user_id_0002回复我的私聊消息'
+					}
+				]
 			};
+		},
+		methods: {
+			// #ifdef H5
+			sendMsg() {
+				let data = {
+					from: 'me',
+					to: this.userId,
+					msg: '私聊消息'
+				}
+				this.$socket.emit('chart',this.msg,data);
+			},
+			// #endif
+
+			// #ifdef MP-WEIXIN
+			sendMsg() {
+				wx.sendSocketMessage({
+					data:this.msg
+				});
+				console.log("===");
+				console.log(process.env.API_PATH)
+			},
+			// #endif
+		},
+		// #ifdef H5
+		sockets:{
+			connect: function(){  //这里是监听connect事件
+				console.log('有客户端链接');
+			},
+			customEmit: function(val){
+			  console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+			},
+			chart: function (data) {
+				console.log('服务端返回消息');
+				console.log(data);
+			}
+		},
+		onLoad(e) {
+			this.userId = e.id;
+		},
+		onReady(){
+			this.$socket.emit('connect', '连接事件'); //在这里触发connect事件
+		},
+		// #endif
+
+
+		// #ifdef MP-WEIXIN
+		onLoad(e) {
+			this.userId = e.id;
+		},
+		onReady() {
+			wx.connectSocket({
+				url:`ws://127.0.0.1:3000`,
+			});
+
+			wx.onSocketOpen(function(res){
+				console.log('websocket opened.');
+			});
+			//连接失败的事件：
+
+			wx.onSocketError(function(res){
+			  console.log('websocket fail');
+			})
+			//收到服务器的消息时触发的事件：
+
+			wx.onSocketMessage(function(res){
+				console.log('received msg: ' + res.data);
+			})
 		}
+		// #endif
 	}
 </script>
-
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>-->
 
 <style scoped>
 .main{

@@ -13,6 +13,7 @@
     "mysql2": "^1.6.5",
     "oauth2-server": "^3.0.1",
     "qiniu": "^7.2.1",
-    "sequelize": "^5.8.2"
+    "sequelize": "^5.8.2",
+    "socket.io": "^2.2.0"
   }
 }

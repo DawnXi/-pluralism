@@ -1,20 +1,7 @@
 <template>
 	<view class="chart-list">
 		<view class="list-title">最近会话</view>
-		<view class="item" v-for="n in 10" :key="n">
-			<view class="left">
-				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
-				<view class="user-info">
-					<view class="name">肉包来一笼<text class="tag">网易.人士</text></view>
-					<view class="msg">肉包来肉包来一笼肉包来一笼一笼</view>
-				</view>
-			</view>
-			<view class="right">
-				<view class="time">09：40</view>
-				<i class="iconfont icon-pinglun"></i>
-			</view>
-		</view>
-		<view class="item">
+		<view class="item" v-for="n in 10" :key="n" @tap="goChart('user_id_00' + n)">
 			<view class="left">
 				<img class="img" src="https://picsum.photos/500/500?image=399" alt="">
 				<view class="user-info">

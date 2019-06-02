@@ -2,15 +2,14 @@ import Vue from 'vue'
 import App from './App'
 import store from './state/index.js'
 
-// import axios from 'axios'
-// 
-// Vue.prototype.$http = axios;
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+// #ifdef H5
+import VueSocketio from 'vue-socket.io';
+Vue.use(VueSocketio, 'http://127.0.0.1:3000/');
+// #endif
+
 
 
 Vue.config.productionTip = false
-// import store from './store'  
-// Vue.prototype.$store = store  
 
 App.mpType = 'app'
 
