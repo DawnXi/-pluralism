@@ -9,6 +9,7 @@
 // app.use(bodyParser.json()); // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const DB = require('./models/DB');
+const Oauth  = require('./models/auth');
 // const querystring = require('querystring');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
@@ -39,7 +40,7 @@ app.all('*', function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); // 设置具体的允许跨域的地址
         res.setHeader("Access-Control-Allow-Credentials", "true"); // 允许请求携带cookie
        //       res.header("Access-Control-Allow-Headers", "X-Requested-With,access-token"); // 允许携带自定义头部信息
-        res.header("Access-Control-Allow-Headers", "X-Requested-With,refresh-token,access-token,authorization"); // 允许携带自定义头部信息
+        res.header("Access-Control-Allow-Headers", "X-Requested-With,refresh-token,access-token,authorization,content-type,custom-header,secret"); // 允许携带自定义头部信息
         res.setHeader("Access-Control-Allow-Methods", "*");
         //res.setHeader("Access-Control-Allow-Headers", "*");
         res.setHeader("Access-Control-Expose-Headers", "*");
@@ -602,6 +603,19 @@ app.post('/api/delete-resume/:id', (req,res) => {
 // 	
 // })
 
+app.post('/api/register', (req,res) => {
+	let hash = require('hash.js');
+	let data  = {
+		username: req.body.username,
+		password: hash.sha256().update(req.body.password).digest('hex')
+	};
+	DB.models.User.create(data).then( result => {
+		res.json(result);
+	}).catch(err => {
+		res.status(err.code || 500).json(err.message || '服务器错误');
+	});
+})
+
 let address = require('./models/address');
 
 // 地址查询接口
@@ -643,6 +657,55 @@ app.get('/api/getAddress/street', (req,res) => {
 	})
 });
 
+app.get('/test', (req,res) => {
+	let data = {
+   	data: {
+	   	is_ticket_trade: true,
+	   	is_error: false,
+	   	qr_url: 'http://www.gongjuji.net'
+   	}
+   };
+   if(req.query.order_no === '111') {
+   	// 不是票务订单
+   	data.data = {
+	   	is_ticket_trade: false,
+	   	is_error: false,
+	   	qr_url: ''
+   	}
+   } else if (req.query.order_no === '222') {
+   	// 出票中
+   	data.data = {
+	   	is_ticket_trade: false,
+	   	is_error: false,
+	   	qr_url: ''
+   	}
+   } else if (req.query.order_no === '333') {
+   	// 出票成功
+   	data.data = {
+	   	is_ticket_trade: false,
+	   	is_error: false,
+	   	qr_url: 'http://www.baidu.com'
+   	}
+
+   } else if (req.query.order_no === '444') {
+   	// 出票失败
+   	data.data = {
+	   	is_ticket_trade: false,
+	   	is_error: true,
+	   	qr_url: ''
+   	}
+
+   } else if (req.query.order_no === '555') {
+   	// 查询订单失败
+   	data.data = {
+   	}
+    res.status(500).send(500, '查询订单失败')
+   	res.end()
+   }
+
+   res.json(data);
+});
+
 
 // // 测试连接
 // sequelize.authenticate()
@@ -654,59 +717,93 @@ app.get('/api/getAddress/street', (req,res) => {
 // 	});
 
 // 获取用户信息
-app.oauth = new OAuth2Server({
-	model: require('./models/auth.js'),
-	accessTokenLifetime: 60 * 60,
-	allowBearerTokensInQueryString: true
-});
-
-app.all('/oauth/token', obtainToken);
-
-app.get('/', authenticateRequest, function(req, res) {
-
-	res.send('Congratulations, you are in a secret area!');
-});
-
-app.post('/api/login', function(req, res) {
-
-	res.send('Congratulations, you are in a secret area!');
-});
-
-app.get('/test', authenticateRequest, function(req, res) {
-
-	res.send('Congratulations, you are in a secret area!');
-});
-
-function obtainToken(req, res) {
-
-	let request = new Request(req);
-	let response = new Response(res);
-
-	return app.oauth.token(request, response)
-		.then(function(token) {
-
-			res.json(token);
-		}).catch(function(err) {
-
-			res.status(err.code || 500).json(err);
-		});
-}
-
-function authenticateRequest(req, res, next) {
-
-	let request = new Request(req);
-	let response = new Response(res);
-
-	return app.oauth.authenticate(request, response)
-		.then(function(token) {
-			next();
-		}).catch(function(err) {
-
-			res.status(err.code || 500).json(err);
-		});
-}
+// app.oauth = new OAuth2Server({
+// 	model: require('./models/auth.js'),
+// 	accessTokenLifetime: 60 * 60,
+// 	allowBearerTokensInQueryString: true
+// });
+// 
+// app.all('/oauth/token', obtainToken);
+// 
+// app.get('/', authenticateRequest, function(req, res) {
+// 
+// 	res.send('Congratulations, you are in a secret area!');
+// });
+// 
+// app.post('/api/login', function(req, res) {
+// 
+// 	res.send('Congratulations, you are in a secret area!');
+// });
+// 
+// app.get('/test', authenticateRequest, function(req, res) {
+// 
+// 	res.send('Congratulations, you are in a secret area!');
+// });
+// 
+// function obtainToken(req, res) {
+// 
+// 	let request = new Request(req);
+// 	let response = new Response(res);
+// 
+// 	return app.oauth.token(request, response)
+// 		.then(function(token) {
+// 
+// 			res.json(token);
+// 		}).catch(function(err) {
+// 
+// 			res.status(err.code || 500).json(err);
+// 		});
+// }
+// 
+// function authenticateRequest(req, res, next) {
+// 
+// 	let request = new Request(req);
+// 	let response = new Response(res);
+// 
+// 	return app.oauth.authenticate(request, response)
+// 		.then(function(token) {
+// 			next();
+// 		}).catch(function(err) {
+// 
+// 			res.status(err.code || 500).json(err);
+// 		});
+// }
 // todo 把路由提取出来
 // todo 图片上传接口 把图片上传到七牛云
 
+// Oauth测试
+const model = {
+  // We support returning promises.
+  getAccessToken: function() {
+    return new Promise('works!');
+  },
 
-app.listen(888);
+  // Or, calling a Node-style callback.
+  getAuthorizationCode: function(done) {
+    done(null, 'works!');
+  },
+
+  // Or, using generators.
+  getClient: function*() {
+    yield somethingAsync();
+    return 'works!';
+  },
+
+  // Or, async/wait (using Babel).
+  getUser: async function() {
+    await somethingAsync();
+    return 'works!';
+  }
+};
+
+const OAuth2 = require('oauth2-server');
+let oauth = new OAuth2({model: model});
+
+
+
+
+// // 获取oauth 连接信息
+// console.log('获取客户端id');
+// console.log(Oauth.getClient(2,'jjj'));
+
+app.listen(8088);

@@ -1,6 +1,7 @@
 // import axios from 'axios'
 // import JSEncrypt from '../../common/jsencrypt.min.js'
 // import JSEncrypt from 'jsencrypt'
+import  Cookies from 'js-cookie'
 const user = {
 	namespaced: true,
 	state: {
@@ -81,7 +82,7 @@ const user = {
 			// 							userName : state.userInfo.username
 			// 						}
 			uni.request({
-				url: 'http://47.90.203.87:8088/api/register', //仅为示例，并非真实接口地址。
+				url: 'http://localhost:8088/api/register', //仅为示例，并非真实接口地址。
 				method: 'POST',
 				data: options.data,
 				success: (res) => {
@@ -101,19 +102,24 @@ const user = {
 			// 					userName : state.userInfo.username
 			// 				}
 			uni.request({
-				url: 'http://39.96.199.119:888/oauth/token', //仅为示例，并非真实接口地址。
+				url: 'http://localhost:8088/oauth/token', //仅为示例，并非真实接口地址。
 				data: options.data,
 				method: 'POST',
 				header: {
 					'custom-header': 'hello', //自定义请求头信息
+					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				success: (res) => {
 					if (res.statusCode === 200) {
 						commit('setUserInfo', res.data.data);
+						Cookies.set('user',res.data.data);
 						if (options.success && typeof(options.success) === 'function') {
 							options.success(res.data);
 						}
 					}
+				},
+				error (err) {
+					console.log(err);
 				}
 			});
 		}

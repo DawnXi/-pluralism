@@ -48,7 +48,7 @@ let dump = function() {
  * Methods used by all grant types.
  */
 
-let getAccessToken = function(token) {
+module.exports.getAccessToken = function(token) {
 
 	let tokens = config.tokens.filter(function(savedToken) {
 
@@ -58,22 +58,23 @@ let getAccessToken = function(token) {
 	return tokens[0];
 };
 
-let getClient = function(clientId, clientSecret) {
+module.exports.getClient = function(clientId, clientSecret) {
+	
 
-	let clients = config.clients.filter(function(client) {
+// 	let clients = config.clients.filter(function(client) {
+// 
+// 		return client.clientId === clientId && client.clientSecret === clientSecret;
+// 	});
+// 
+// 	let confidentialClients = config.confidentialClients.filter(function(client) {
+// 
+// 		return client.clientId === clientId && client.clientSecret === clientSecret;
+// 	});
 
-		return client.clientId === clientId && client.clientSecret === clientSecret;
-	});
-
-	let confidentialClients = config.confidentialClients.filter(function(client) {
-
-		return client.clientId === clientId && client.clientSecret === clientSecret;
-	});
-
-	return clients[0] || confidentialClients[0];
+	return clients[0];
 };
 
-let saveToken = function(token, client, user) {
+module.exports.saveToken = function(token, client, user) {
 
 	token.client = {
 		id: client.clientId
@@ -92,7 +93,7 @@ let saveToken = function(token, client, user) {
  * Method used only by password grant type.
  */
 
-let getUser = function(username, password) {
+module.exports.getUser = function(username, password) {
 return 	sequelize.models.user.findAll({
 	  where: {
 	    username: username,
@@ -111,7 +112,7 @@ return 	sequelize.models.user.findAll({
  * Method used only by client_credentials grant type.
  */
 
-let getUserFromClient = function(client) {
+module.exports.getUserFromClient = function(client) {
 
 	let clients = config.confidentialClients.filter(function(savedClient) {
 
@@ -125,7 +126,7 @@ let getUserFromClient = function(client) {
  * Methods used only by refresh_token grant type.
  */
 
-let getRefreshToken = function(refreshToken) {
+module.exports.getRefreshToken = function(refreshToken) {
 
 	let tokens = config.tokens.filter(function(savedToken) {
 
@@ -142,7 +143,7 @@ let getRefreshToken = function(refreshToken) {
 	return token;
 };
 
-let revokeToken = function(token) {
+module.exports.revokeToken = function(token) {
 
 	config.tokens = config.tokens.filter(function(savedToken) {
 
@@ -160,13 +161,13 @@ let revokeToken = function(token) {
 /**
  * Export model definition object.
  */
-
-module.exports = {
-	getAccessToken: getAccessToken,
-	getClient: getClient,
-	saveToken: saveToken,
-	getUser: getUser,
-	getUserFromClient: getUserFromClient,
-	getRefreshToken: getRefreshToken,
-	revokeToken: revokeToken
-};
+// 
+// module.exports = {
+// 	getAccessToken: getAccessToken,
+// 	getClient: getClient,
+// 	saveToken: saveToken,
+// 	getUser: getUser,
+// 	getUserFromClient: getUserFromClient,
+// 	getRefreshToken: getRefreshToken,
+// 	revokeToken: revokeToken
+// };

@@ -1,0 +1,73 @@
+stages:
+  - test
+  - build
+  # - build-image
+  # - publish
+
+#test-unit:
+#  image: node
+#  stage: test-unit
+#  script:
+#    - npm i
+#    - npm run test:unit
+#  only:
+#    - test
+
+#test-e2e:
+#  image: node
+#  stage: test-e2e
+#  script:
+#    - npm i
+#  only:
+#    - test
+
+# test-unit-e2e-staging:
+#   image: cypress/included:3.3.1
+#   stage: test
+#   script:
+#     #    - CYPRESS_CACHE_FOLDER=node_modules/cypress npm i --registry=https://registry.npm.taobao.org
+#     #    - CYPRESS_CACHE_FOLDER=node_modules/cypress cypress install
+#     #    - cp -r node_modules/cypress /root/.cache/Cypress
+#     - npm i --registry=https://registry.npm.taobao.org
+#     - npm run test:unit
+#   #    - npm run startOnCI
+#   cache:
+#     key: merge_requests
+#     paths:
+#       - node_modules/
+#   only:
+#     - merge_requests
+
+test-unit&&test-e2e:
+  image: node
+  stage: test
+  script:
+#    - CYPRESS_CACHE_FOLDER=node_modules/cypress npm i --registry=https://registry.npm.taobao.org
+#    - CYPRESS_CACHE_FOLDER=node_modules/cypress cypress install
+#    - cp -r node_modules/cypress /root/.cache/Cypress
+    - npm i --registry=https://registry.npm.taobao.org
+    - npm run test:unit
+#    - npm run startOnCI
+  # cache:
+  #   key: "$CI_COMMIT_REF_NAME"
+  #   paths:
+  #     - node_modules/
+  #     - dist/
+  only:
+    - develop
+    - master
+	- update
+
+build:
+  image: node
+  stage: build
+  script:
+    - npm run build
+  # cache:
+  #   key: "$CI_COMMIT_REF_NAME"
+  #   paths:
+  #     - node_modules/
+  #     - dist/
+  only:
+    - master
+	- update

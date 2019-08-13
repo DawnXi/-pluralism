@@ -97,11 +97,12 @@
 			// #ifdef H5
 			sendMsg() {
 				let data = {
+					type: 'private',
 					from: 'me',
 					to: this.userId,
-					msg: '私聊消息'
+					msg: '私聊消息' + this.msg
 				}
-				this.$socket.emit('chart',this.msg,data);
+				this.$socket.emit('chart',data);
 			},
 			// #endif
 
@@ -124,8 +125,13 @@
 			  console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
 			},
 			chart: function (data) {
-				console.log('服务端返回消息');
-				console.log(data);
+				// 判断消息类型是否是私聊 并且消息是不是发送给自己的 如果是则显示，不是则不显示
+				if (data.type === 'private' && data.to === this.userId) {
+					console.log('服务端返回消息,并且是发给我自己的，可以看消息了');
+					console.log(data);
+				} else  {
+					console.log('服务端返回消息，但是不是发给我的，不能看哦');
+				}
 			}
 		},
 		onLoad(e) {

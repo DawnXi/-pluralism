@@ -43,6 +43,7 @@
 		></xyDialog>
 
 		<view @tap="goChart">测试聊天会话</view>
+		<view @tap="goLogin">测试登录</view>
 	</view>
 </template>
 
@@ -249,7 +250,12 @@
 			},
 			goChart() {
 				uni.navigateTo({
-					url: '../../pages/chart-list/chart-list'
+					url: '../../pages/chart/chart?id=user_id_005'
+				})
+			},
+			goLogin() {
+				uni.navigateTo({
+					url: '../../pages/login/login'
 				})
 			}
 		},

@@ -37,7 +37,7 @@ let server = app.listen(3000);
 let io = require('socket.io').listen(server);
 io.sockets.on('connection', (socket) => {
   console.log('123', '有客户端连接');
-      socket.on('chart', function (msg,data) {
+      socket.on('chart', function (data) {
           // redisClient.get(data, function(error, res){
           //     if(error) {
           //         console.log(error);
@@ -45,7 +45,10 @@ io.sockets.on('connection', (socket) => {
           //         socket.emit('chart', res);
           //     }
           // });
-		  socket.emit('chart','你发送的消息是' + msg);
+          // if(data.to === 'user_id_005') {
+          //     socket.emit('user_id_005','是你啊' + data.to);
+          // }
+		  socket.emit('chart',data);
           console.log(data);
       });
 });

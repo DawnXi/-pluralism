@@ -10,6 +10,7 @@
   "description": "",
   "dependencies": {
     "express": "^4.16.4",
+    "hash.js": "^1.1.7",
     "mysql2": "^1.6.5",
     "oauth2-server": "^3.0.1",
     "qiniu": "^7.2.1",
