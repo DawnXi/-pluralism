@@ -53,10 +53,10 @@ test-unit&&test-e2e:
   #   paths:
   #     - node_modules/
   #     - dist/
-  only:
-    - develop
-    - master
-	- update
+#  only:
+#    - develop
+#    - master
+#	- update
 
 build:
   image: node
@@ -68,6 +68,6 @@ build:
   #   paths:
   #     - node_modules/
   #     - dist/
-  only:
-    - master
-	- update
+#  only:
+#    - master
+#	- update
